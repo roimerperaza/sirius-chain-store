@@ -23,7 +23,7 @@
                 name="password"
                 label="Password"
                 hint="At least 8 characters"
-                counter
+                counter="20"
                 @click:append="passwordRules.show = !passwordRules.show"
               ></v-text-field>
             </v-col>
