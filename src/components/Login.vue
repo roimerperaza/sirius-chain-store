@@ -22,7 +22,7 @@
                 :type="passwordRules.show ? 'text' : 'password'"
                 name="password"
                 label="Password"
-                hint="At least 8 characters"
+                hint="At least 8 characters."
                 counter="20"
                 @click:append="passwordRules.show = !passwordRules.show"
               ></v-text-field>
