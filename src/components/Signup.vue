@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" ref="form">
     <v-container>
       <v-row>
         <v-col cols="9" class="mx-auto">
@@ -8,7 +8,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="name"
+                v-model.trim="formValue.name"
                 required
                 :minlength="configForm.name.min"
                 :maxlength="configForm.name.max"
@@ -22,7 +22,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="lastname"
+                v-model.trim="formValue.lastname"
                 :minlength="configForm.lastname.min"
                 :maxlength="configForm.lastname.max"
                 :counter="configForm.lastname.max"
@@ -35,7 +35,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.lazy.trim="username"
+                v-model.trim="formValue.username"
                 :minlength="configForm.username.min"
                 :maxlength="configForm.username.max"
                 :counter="configForm.username.max"
@@ -48,7 +48,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model="email"
+                v-model="formValue.email"
                 :maxlength="configForm.email.max"
                 :counter="configForm.email.max"
                 :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid]"
@@ -60,7 +60,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="password"
+                v-model.trim="formValue.password"
                 :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
                 :maxlength="configForm.password.max"
                 :counter="configForm.password.max"
@@ -68,7 +68,7 @@
                 :label="configForm.password.label"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
-                hint="Enter password"
+                hint=""
                 @click:append="configForm.password.show = !configForm.password.show"
               ></v-text-field>
             </v-col>
@@ -77,7 +77,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="confirmPassword"
+                v-model.trim="formValue.confirmPassword"
                 :append-icon="configForm.password.showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
                 :maxlength="configForm.password.max"
                 :counter="configForm.password.max"
@@ -85,14 +85,19 @@
                 label="Confirm Password"
                 :type="configForm.password.showConfirm ? 'text' : 'password'"
                 name="confirmPassword"
-                hint="Enter password"
+                hint=""
                 @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
               ></v-text-field>
             </v-col>
 
+            <!-- Button Cancel -->
+            <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-end">
+              <v-btn @click="reset" outlined color="fantasy">CANCEL</v-btn>
+            </v-col>
+
             <!-- Button Register -->
-            <v-col cols="8" class="mx-auto d-flex justify-center">
-              <v-btn :disabled="!valid" outlined color="fantasy">REGISTER</v-btn>
+            <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
+              <v-btn :loading="loading" :disabled="!valid || loading" outlined color="fantasy" @click="submit">REGISTER</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -105,13 +110,16 @@
 export default {
   data: () => ({
     configForm: null,
+    loading: false,
     valid: false,
-    name: "",
-    lastname: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    email: ""
+    formValue: {
+      name: "",
+      lastname: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      email: ""
+    }
   }),
   computed: {
     passwordConfirmationRule() {
@@ -122,6 +130,14 @@ export default {
   watch: {
     user() {
       this.user = this.user.replace(/ /g, "");
+    }
+  },
+  methods: {
+    submit() {
+      console.log(this.formValue);
+    },
+    reset() {
+      this.$refs.form.reset();
     }
   },
   created() {

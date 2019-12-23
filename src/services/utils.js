@@ -8,9 +8,9 @@ export default class Utils {
         rules: {
           required: v => !!v || "Username is required",
           min: v =>
-            v.length >= 4 || "Username must be less than 4 characters",
+            v && v.length >= 4 || "Username must be less than 4 characters",
           max: v =>
-            v.length <= 10 || "Username must be a maximum of 10 characters"
+          v && v.length <= 10 || "Username must be a maximum of 10 characters"
         }
       },
       name: {
@@ -19,21 +19,21 @@ export default class Utils {
         max: 20,
         rules: {
           required: v => !!v || "Name is required",
-          min: v => v.length >= 3 || "Name must be less than 3 characters",
+          min: v => v && v.length >= 3 || "Name must be less than 3 characters",
           max: v =>
-            v.length <= 20 || "Name must be a maximum of 20 characters"
+          v && v.length <= 20 || "Name must be a maximum of 20 characters"
         }
       },
       lastname: {
-        label: "Lastname",
+        label: "Last name",
         min: 3,
         max: 20,
         rules: {
           required: v => !!v || "Last name is required",
           min: v =>
-            v.length >= 3 || "Last name must be less than 3 characters",
+          v && v.length >= 3 || "Last name must be less than 3 characters",
           max: v =>
-            v.length <= 20 || "Last name must be a maximum of 20 characters"
+          v && v.length <= 20 || "Last name must be a maximum of 20 characters"
         }
       },
       password: {
@@ -45,9 +45,9 @@ export default class Utils {
         rules: {
           required: value => !!value || "Password is required",
           min: v =>
-            v.length >= 5 || "Password must be less than 5 characters",
+          v && v.length >= 5 || "Password must be less than 5 characters",
           max: v =>
-            v.length <= 20 || "Password must be a maximum of 20 characters"
+          v && v.length <= 20 || "Password must be a maximum of 20 characters"
         }
       },
       email: {
@@ -56,9 +56,9 @@ export default class Utils {
         max: 30,
         rules: {
           required: v => !!v || "E-mail is required",
-          min: v => v.length >= 4 || "Email must be less than 5 characters",
+          min: v => v && v.length >= 5 || "Email must be less than 5 characters",
           max: v =>
-            v.length <= 10 || "Email must be a maximum of 30 characters",
+          v && v.length <= 30 || "Email must be a maximum of 30 characters",
           isValid: v => /.+@.+/.test(v) || "E-mail must be valid"
         }
       }

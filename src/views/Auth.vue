@@ -5,7 +5,7 @@
         <v-card class="mx-auto" >
           <v-container class="p-0">
             <v-row class="mx-auto">
-              <v-col cols="12" sm="5" md="4" class="p-0">
+              <v-col cols="12" sm="5" md="4" class="p-0 d-none d-sm-block">
                 <v-carousel cycle :show-arrows="showArrows">
                   <v-carousel-item
                     v-for="(item,i) in 3"
@@ -65,8 +65,6 @@
 <script>
 import SignUp from "@/components/Signup";
 import Login from "@/components/Login";
-import colors from "vuetify/lib/util/colors";
-//   :style="`color: ${theme.primary}` "
 export default {
   inject: ["theme"],
   data: () => ({
