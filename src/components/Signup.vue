@@ -68,7 +68,7 @@
                 :label="configForm.password.label"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
-                hint="At least 8 characters"
+                hint="Enter password"
                 @click:append="passwordRules.show = !passwordRules.show"
               ></v-text-field>
             </v-col>
@@ -85,7 +85,7 @@
                 label="Confirm Password"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="confirmPassword"
-                hint="At least 8 characters"
+                hint="Enter password"
                 @click:append="passwordRules.show = !passwordRules.show"
               ></v-text-field>
             </v-col>
