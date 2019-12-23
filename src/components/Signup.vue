@@ -69,7 +69,7 @@
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
                 hint="Enter password"
-                @click:append="passwordRules.show = !passwordRules.show"
+                @click:append="configForm.password.show = !configForm.password.show"
               ></v-text-field>
             </v-col>
 
@@ -78,15 +78,15 @@
               <v-text-field
                 color="fantasy"
                 v-model.trim="confirmPassword"
-                :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="configForm.password.showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
                 :maxlength="configForm.password.max"
                 :counter="configForm.password.max"
                 :rules="[configForm.password.rules.required, configForm.password.rules.min, configForm.password.rules.max, passwordConfirmationRule]"
                 label="Confirm Password"
-                :type="configForm.password.show ? 'text' : 'password'"
+                :type="configForm.password.showConfirm ? 'text' : 'password'"
                 name="confirmPassword"
                 hint="Enter password"
-                @click:append="passwordRules.show = !passwordRules.show"
+                @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
               ></v-text-field>
             </v-col>
 

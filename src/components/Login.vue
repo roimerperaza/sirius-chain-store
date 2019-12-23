@@ -30,7 +30,7 @@
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
                 hint="Enter password"
-                @click:append="passwordRules.show = !passwordRules.show"
+                @click:append="configForm.password.show = !configForm.password.show"
               ></v-text-field>
             </v-col>
 

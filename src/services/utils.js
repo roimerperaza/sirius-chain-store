@@ -41,6 +41,7 @@ export default class Utils {
         min: 5,
         max: 20,
         show: false,
+        showConfirm: false,
         rules: {
           required: value => !!value || "Password is required",
           min: v =>
