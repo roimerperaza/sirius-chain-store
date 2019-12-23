@@ -1,6 +1,9 @@
 export default class Utils {
   static getConfigForm() {
     return {
+      generalRules: {
+        notAllowSpaces: v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
+      },
       username: {
         label: "Username",
         min: 4,
@@ -10,7 +13,7 @@ export default class Utils {
           min: v =>
             v && v.length >= 4 || "Username must be less than 4 characters",
           max: v =>
-          v && v.length <= 10 || "Username must be a maximum of 10 characters"
+            v && v.length <= 10 || "Username must be a maximum of 10 characters"
         }
       },
       name: {
@@ -20,8 +23,7 @@ export default class Utils {
         rules: {
           required: v => !!v || "Name is required",
           min: v => v && v.length >= 3 || "Name must be less than 3 characters",
-          max: v =>
-          v && v.length <= 20 || "Name must be a maximum of 20 characters"
+          max: v => v && v.length <= 20 || "Name must be a maximum of 20 characters"
         }
       },
       lastname: {
@@ -31,9 +33,9 @@ export default class Utils {
         rules: {
           required: v => !!v || "Last name is required",
           min: v =>
-          v && v.length >= 3 || "Last name must be less than 3 characters",
+            v && v.length >= 3 || "Last name must be less than 3 characters",
           max: v =>
-          v && v.length <= 20 || "Last name must be a maximum of 20 characters"
+            v && v.length <= 20 || "Last name must be a maximum of 20 characters"
         }
       },
       password: {
@@ -45,9 +47,9 @@ export default class Utils {
         rules: {
           required: value => !!value || "Password is required",
           min: v =>
-          v && v.length >= 5 || "Password must be less than 5 characters",
+            v && v.length >= 5 || "Password must be less than 5 characters",
           max: v =>
-          v && v.length <= 20 || "Password must be a maximum of 20 characters"
+            v && v.length <= 20 || "Password must be a maximum of 20 characters"
         }
       },
       email: {
@@ -58,10 +60,14 @@ export default class Utils {
           required: v => !!v || "E-mail is required",
           min: v => v && v.length >= 5 || "Email must be less than 5 characters",
           max: v =>
-          v && v.length <= 30 || "Email must be a maximum of 30 characters",
+            v && v.length <= 30 || "Email must be a maximum of 30 characters",
           isValid: v => /.+@.+/.test(v) || "E-mail must be valid"
         }
       }
     }
+  }
+
+  static isMatch(value1, value2, nameValidation = '') {
+    return value1 === value2 || `${nameValidation} must match`;
   }
 }

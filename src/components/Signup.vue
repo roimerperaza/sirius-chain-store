@@ -13,7 +13,7 @@
                 :minlength="configForm.name.min"
                 :maxlength="configForm.name.max"
                 :counter="configForm.name.max"
-                :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max]"
+                :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.name.label"
               ></v-text-field>
             </v-col>
@@ -26,7 +26,7 @@
                 :minlength="configForm.lastname.min"
                 :maxlength="configForm.lastname.max"
                 :counter="configForm.lastname.max"
-                :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max]"
+                :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.lastname.label"
               ></v-text-field>
             </v-col>
@@ -39,7 +39,7 @@
                 :minlength="configForm.username.min"
                 :maxlength="configForm.username.max"
                 :counter="configForm.username.max"
-                :rules="[configForm.username.rules.required, configForm.username.rules.min, configForm.username.rules.max]"
+                :rules="[configForm.username.rules.required, configForm.username.rules.min, configForm.username.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.username.label"
               ></v-text-field>
             </v-col>
@@ -48,10 +48,10 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model="formValue.email"
+                v-model.trim="formValue.email"
                 :maxlength="configForm.email.max"
                 :counter="configForm.email.max"
-                :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid]"
+                :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.email.label"
               ></v-text-field>
             </v-col>
@@ -68,7 +68,7 @@
                 :label="configForm.password.label"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
-                hint=""
+                hint
                 @click:append="configForm.password.show = !configForm.password.show"
               ></v-text-field>
             </v-col>
@@ -85,7 +85,8 @@
                 label="Confirm Password"
                 :type="configForm.password.showConfirm ? 'text' : 'password'"
                 name="confirmPassword"
-                hint=""
+                hint
+                :disabled="disabledConfirmPassword"
                 @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
               ></v-text-field>
             </v-col>
@@ -97,7 +98,13 @@
 
             <!-- Button Register -->
             <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
-              <v-btn :loading="loading" :disabled="!valid || loading" outlined color="fantasy" @click="submit">REGISTER</v-btn>
+              <v-btn
+                :loading="loading"
+                :disabled="!valid || loading"
+                outlined
+                color="fantasy"
+                @click="submit"
+              >REGISTER</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -124,7 +131,24 @@ export default {
   computed: {
     passwordConfirmationRule() {
       return () =>
-        this.formValue.password === this.formValue.confirmPassword || "Password must match";
+        this.$utils.isMatch(
+          this.formValue.password,
+          this.formValue.confirmPassword,
+          "Password"
+        );
+    },
+    disabledConfirmPassword() {
+      if (this.formValue.password === "") {
+        this.formValue.confirmPassword = "";
+        // this.$refs.form.confirmPassword.reset()
+        console.log(this.$refs.form);
+        /*if (this.$refs.form) {
+          this.$refs.form.resetValidation();
+        }*/
+        return true;
+      }
+
+      return false;
     }
   },
   watch: {
@@ -135,7 +159,7 @@ export default {
   methods: {
     submit() {
       console.log(this.formValue);
-       this.loading = true;
+      this.loading = true;
     },
     reset() {
       this.loading = false;
