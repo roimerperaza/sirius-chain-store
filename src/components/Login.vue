@@ -29,7 +29,7 @@
                 :label="configForm.password.label"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
-                hint=""
+                hint
                 @click:append="configForm.password.show = !configForm.password.show"
               ></v-text-field>
             </v-col>
@@ -41,7 +41,13 @@
 
             <!-- Button Register -->
             <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
-              <v-btn :loading="loading" :disabled="!valid || loading" outlined color="fantasy" @click="submit">LOGIN</v-btn>
+              <v-btn
+                :loading="loading"
+                :disabled="!valid || loading"
+                outlined
+                color="fantasy"
+                @click="submit"
+              >LOGIN</v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -66,6 +72,7 @@ export default {
       this.loading = true;
     },
     reset() {
+      this.loading = false;
       this.$refs.form.reset();
     }
   },

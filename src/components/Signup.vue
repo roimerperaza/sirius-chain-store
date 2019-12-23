@@ -124,7 +124,7 @@ export default {
   computed: {
     passwordConfirmationRule() {
       return () =>
-        this.password === this.confirmPassword || "Password must match";
+        this.formValue.password === this.formValue.confirmPassword || "Password must match";
     }
   },
   watch: {
@@ -135,8 +135,10 @@ export default {
   methods: {
     submit() {
       console.log(this.formValue);
+       this.loading = true;
     },
     reset() {
+      this.loading = false;
       this.$refs.form.reset();
     }
   },
