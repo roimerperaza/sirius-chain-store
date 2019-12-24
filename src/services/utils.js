@@ -1,4 +1,12 @@
 export default class Utils {
+  
+  /**
+   *
+   *
+   * @static
+   * @returns
+   * @memberof Utils
+   */
   static getConfigForm() {
     return {
       generalRules: {
@@ -67,6 +75,16 @@ export default class Utils {
     }
   }
 
+  /**
+   *
+   *
+   * @static
+   * @param {*} value1
+   * @param {*} value2
+   * @param {string} [nameValidation='']
+   * @returns
+   * @memberof Utils
+   */
   static isMatch(value1, value2, nameValidation = '') {
     return value1 === value2 || `${nameValidation} must match`;
   }

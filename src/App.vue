@@ -1,6 +1,6 @@
-<template dark>
-  <v-app dark>
-    <v-content :style="theme">
+<template >
+  <v-app >
+    <v-content>
       <v-container style="height: 100%;">
         <router-view></router-view>
       </v-container>
@@ -11,9 +11,10 @@
 <script>
 export default {
   name: "App",
-  components: {},
-  data: () => ({
-    theme: "background-color: '#212121'"
-  })
+  data: () => ({}),
+  beforeCreate() {
+    // console.log(this.lodash.random(20));
+    console.log('Users ---> ', this.$storage.getAllUsers());
+  }
 };
 </script>

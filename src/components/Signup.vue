@@ -15,6 +15,7 @@
                 :counter="configForm.name.max"
                 :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.name.label"
+                @keyup="deleteSpaces('name')"
               ></v-text-field>
             </v-col>
 
@@ -28,6 +29,7 @@
                 :counter="configForm.lastname.max"
                 :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.lastname.label"
+                @keyup="deleteSpaces('lastname')"
               ></v-text-field>
             </v-col>
 
@@ -36,11 +38,20 @@
               <v-text-field
                 color="fantasy"
                 v-model.trim="formValue.username"
+                :loading="searchingUser"
+                :disabled="searchingUser"
                 :minlength="configForm.username.min"
                 :maxlength="configForm.username.max"
                 :counter="configForm.username.max"
-                :rules="[configForm.username.rules.required, configForm.username.rules.min, configForm.username.rules.max, configForm.generalRules.notAllowSpaces]"
+                :rules="[
+                  configForm.username.rules.required, 
+                  configForm.username.rules.min, 
+                  configForm.username.rules.max, 
+                  configForm.generalRules.notAllowSpaces,
+                  userIsRepeat
+                ]"
                 :label="configForm.username.label"
+                @keyup="deleteSpaces('username')"
               ></v-text-field>
             </v-col>
 
@@ -53,6 +64,7 @@
                 :counter="configForm.email.max"
                 :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.email.label"
+                @keyup="deleteSpaces('email')"
               ></v-text-field>
             </v-col>
 
@@ -60,11 +72,16 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="formValue.password"
+                v-model="formValue.password"
                 :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                :minlength="configForm.password.min"
                 :maxlength="configForm.password.max"
                 :counter="configForm.password.max"
-                :rules="[configForm.password.rules.required, configForm.password.rules.min, configForm.password.rules.max]"
+                :rules="[
+                  configForm.password.rules.required, 
+                  configForm.password.rules.min, 
+                  configForm.password.rules.max
+                ]"
                 :label="configForm.password.label"
                 :type="configForm.password.show ? 'text' : 'password'"
                 name="password"
@@ -77,15 +94,21 @@
             <v-col cols="12" md="6">
               <v-text-field
                 color="fantasy"
-                v-model.trim="formValue.confirmPassword"
+                name="confirmPassword"
+                label="Confirm Password"
+                hint="Confirm Password"
+                v-model="formValue.confirmPassword"
                 :append-icon="configForm.password.showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                :minlength="configForm.password.min"
                 :maxlength="configForm.password.max"
                 :counter="configForm.password.max"
-                :rules="[configForm.password.rules.required, configForm.password.rules.min, configForm.password.rules.max, passwordConfirmationRule]"
-                label="Confirm Password"
+                :rules="[
+                  configForm.password.rules.required,
+                  configForm.password.rules.min,
+                  configForm.password.rules.max,
+                  passwordConfirmationRule
+                ]"
                 :type="configForm.password.showConfirm ? 'text' : 'password'"
-                name="confirmPassword"
-                hint
                 :disabled="disabledConfirmPassword"
                 @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
               ></v-text-field>
@@ -99,8 +122,8 @@
             <!-- Button Register -->
             <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
               <v-btn
-                :loading="loading"
-                :disabled="!valid || loading"
+                :loading="sendingForm"
+                :disabled="!valid || sendingForm || searchingUser"
                 outlined
                 color="fantasy"
                 @click="submit"
@@ -117,8 +140,10 @@
 export default {
   data: () => ({
     configForm: null,
-    loading: false,
+    sendingForm: false,
     valid: false,
+    searchingUser: false,
+    userIsRepeat: false,
     formValue: {
       name: "",
       lastname: "",
@@ -129,45 +154,64 @@ export default {
     }
   }),
   computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.$utils.isMatch(
-          this.formValue.password,
-          this.formValue.confirmPassword,
-          "Password"
-        );
-    },
     disabledConfirmPassword() {
-      if (this.formValue.password === "") {
+      if (this.formValue.password === "" || (this.formValue.password && this.formValue.password.length < this.configForm.password.min)) {
         this.formValue.confirmPassword = "";
-        // this.$refs.form.confirmPassword.reset()
-        console.log(this.$refs.form);
-        /*if (this.$refs.form) {
+        if (this.$refs.form) {
           this.$refs.form.resetValidation();
-        }*/
+        }
         return true;
       }
 
       return false;
-    }
-  },
-  watch: {
-    user() {
-      this.user = this.user.replace(/ /g, "");
+    },
+    passwordConfirmationRule() {
+      return () => this.$utils.isMatch(this.formValue.password, this.formValue.confirmPassword, "Password");
     }
   },
   methods: {
+    deleteSpaces(input) {
+      if (input) {
+        this.formValue[input] = this.formValue[input].replace(/ /g, "");
+      }
+    },
     submit() {
+      this.sendingForm = true;
       console.log(this.formValue);
-      this.loading = true;
     },
     reset() {
-      this.loading = false;
+      this.userIsRepeat = false;
+      this.searchingUser = false;
+      this.sendingForm = false;
       this.$refs.form.reset();
+    },
+    validateUsername() {
+      const username = this.formValue.username;
+      if (username && username !== '' && username.length >= this.configForm.username.min) {
+        this.searchingUser = true;
+        setTimeout(() => {
+          if (username &&  username !== '' && username.length >= this.configForm.username.min) {
+            if (this.$storage.getUser(username)) {
+              this.userIsRepeat = `${username} has be exist, try other user.`
+              this.searchingUser = false;
+              return;
+            }
+          }
+
+          this.userIsRepeat = false;
+          this.searchingUser = false;
+        }, 1500);
+      }
+    }
+  },
+  watch: {
+    'formValue.username'(newVal){
+      this.debouncedValidateUsername();
     }
   },
   created() {
     this.configForm = this.$utils.getConfigForm();
+    this.debouncedValidateUsername = this.lodash.debounce(this.validateUsername, 500)
   }
 };
 </script>
