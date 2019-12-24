@@ -32,11 +32,11 @@ class StorageService {
     *
     * @memberof StorageService
     */
-    getAllUsers() {
-        let users = this.get(`${this.correlative}-users`);
+    getUsers() {
+        let users = this.get(`users`);
         if (!users) {
-            this.set(`${this.correlative}-users`, []);
-            users = this.get(`${this.correlative}-users`);
+            this.set(`users`, []);
+            users = this.getUsers();
         }
 
         return users;
@@ -47,13 +47,26 @@ class StorageService {
      *
      * @memberof StorageService
      */
-    getUser(username) {
-        const allUsers = JSON.parse(this.getAllUsers());
-        if (allUsers && allUsers.length > 0) {
-            return allUsers.find(x => x.username === username);
+    getUserByUsername(username) {
+        const users = JSON.parse(this.getUsers());
+        if (users && users.length > 0) {
+            return users.find(x => x.username === username);
         }
 
         return null;
+    }
+
+    /**
+     *
+     *
+     * @param {*} user
+     * @memberof StorageService
+     */
+    saveUser(user) {
+        const users = JSON.parse(this.getUsers());
+        users.push(user);
+        this.set(`users`, users);
+        return true;
     }
 
     /**
@@ -64,9 +77,10 @@ class StorageService {
      * @memberof StorageService
      */
     set(item, value) {
-        let valueConverted = (typeof value === 'object') ? JSON.stringify(value) : value
+        let valueConverted = (typeof value === 'object' || typeof value === 'array') ? JSON.stringify(value) : value
         this.storage.setItem(`${this.correlative}-${item}`, valueConverted)
     }
+    
 }
 
 export { StorageService }

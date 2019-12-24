@@ -11,10 +11,6 @@
 <script>
 export default {
   name: "App",
-  data: () => ({}),
-  beforeCreate() {
-    // console.log(this.lodash.random(20));
-    console.log('Users ---> ', this.$storage.getAllUsers());
-  }
+  data: () => ({})
 };
 </script>

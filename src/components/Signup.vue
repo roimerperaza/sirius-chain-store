@@ -155,29 +155,34 @@ export default {
   }),
   computed: {
     disabledConfirmPassword() {
-      if (this.formValue.password === "" || (this.formValue.password && this.formValue.password.length < this.configForm.password.min)) {
-        this.formValue.confirmPassword = "";
-        if (this.$refs.form) {
-          this.$refs.form.resetValidation();
+      const password = this.formValue.password;
+      if (password) {
+        if (password === "" || password.length < this.configForm.password.min) {
+          this.formValue.confirmPassword = "";
+          return true;
         }
+        return false;
+      } else {
         return true;
       }
-
-      return false;
     },
     passwordConfirmationRule() {
-      return () => this.$utils.isMatch(this.formValue.password, this.formValue.confirmPassword, "Password");
+      return () =>
+        this.$utils.isMatch(this.formValue.password, this.formValue.confirmPassword, "Password");
     }
   },
   methods: {
     deleteSpaces(input) {
-      if (input) {
+      if (this.formValue[input]) {
         this.formValue[input] = this.formValue[input].replace(/ /g, "");
       }
     },
     submit() {
       this.sendingForm = true;
-      console.log(this.formValue);
+      setTimeout(() => {
+        const save = this.$storage.saveUser(this.formValue);
+        this.reset();
+      }, 2500);
     },
     reset() {
       this.userIsRepeat = false;
@@ -187,15 +192,14 @@ export default {
     },
     validateUsername() {
       const username = this.formValue.username;
-      if (username && username !== '' && username.length >= this.configForm.username.min) {
+      const validation = username && username !== "" && username.length >= this.configForm.username.min;
+      if (validation) {
         this.searchingUser = true;
         setTimeout(() => {
-          if (username &&  username !== '' && username.length >= this.configForm.username.min) {
-            if (this.$storage.getUser(username)) {
-              this.userIsRepeat = `${username} has be exist, try other user.`
-              this.searchingUser = false;
-              return;
-            }
+          if (validation && this.$storage.getUserByUsername(username)) {
+            this.searchingUser = false;
+            this.userIsRepeat = `${username} already exists, try another user.`;
+            return;
           }
 
           this.userIsRepeat = false;
@@ -205,13 +209,13 @@ export default {
     }
   },
   watch: {
-    'formValue.username'(newVal){
+    "formValue.username"(newVal) {
       this.debouncedValidateUsername();
     }
   },
   created() {
     this.configForm = this.$utils.getConfigForm();
-    this.debouncedValidateUsername = this.lodash.debounce(this.validateUsername, 500)
+    this.debouncedValidateUsername = this.lodash.debounce(this.validateUsername, 500);
   }
 };
 </script>
