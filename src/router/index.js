@@ -10,12 +10,18 @@ const load = view => {
 
 const routes = [{
   path: '/',
-  name: 'home',
   component: load('Home'),
   meta: {
     requiresAuth: true
   }
 }, {
+  path: '/home',
+  name: 'home',
+  component: load('Home'),
+  meta: {
+    requiresAuth: true
+  }
+},{
   path: '/auth',
   name: 'auth',
   component: load('Auth'),
@@ -24,7 +30,7 @@ const routes = [{
   }
 }, {
   path: '*',
-  redirect: '/'
+  redirect: '/home'
 }]
 
 const router = new VueRouter({

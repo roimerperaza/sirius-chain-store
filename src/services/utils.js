@@ -48,14 +48,14 @@ export default class Utils {
       },
       password: {
         label: "Password",
-        min: 5,
+        min: 8,
         max: 20,
         show: false,
         showConfirm: false,
         rules: {
           required: value => !!value || "Password is required",
           min: v =>
-            v && v.length >= 5 || "Password must be less than 5 characters",
+            v && v.length >= 8 || "Password must be less than 8 characters",
           max: v =>
             v && v.length <= 20 || "Password must be a maximum of 20 characters"
         }

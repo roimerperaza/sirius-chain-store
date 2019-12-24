@@ -116,7 +116,7 @@
 
             <!-- Button Cancel -->
             <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-end">
-              <v-btn @click="reset" outlined color="fantasy">CANCEL</v-btn>
+              <v-btn :disabled="sendingForm" @click="reset" outlined color="fantasy">CANCEL</v-btn>
             </v-col>
 
             <!-- Button Register -->

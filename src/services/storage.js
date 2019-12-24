@@ -10,19 +10,35 @@ class StorageService {
     /**
      *
      *
+     * @param {*} username
+     * @param {*} password
+     * @memberof StorageService
+     */
+    login(username, password) {
+        const user = this.getUserByUsername(username);
+        if (user && user.password === password) {
+            return user;
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     *
      * @memberof StorageService
      */
     clear() {
         this.storage.clear()
     }
 
-     /**
-     *
-     *
-     * @param {*} item
-     * @returns
-     * @memberof StorageService
-     */
+    /**
+    *
+    *
+    * @param {*} item
+    * @returns
+    * @memberof StorageService
+    */
     get(item) {
         return this.storage.getItem(`${this.correlative}-${item}`)
     }
@@ -80,7 +96,7 @@ class StorageService {
         let valueConverted = (typeof value === 'object' || typeof value === 'array') ? JSON.stringify(value) : value
         this.storage.setItem(`${this.correlative}-${item}`, valueConverted)
     }
-    
+
 }
 
 export { StorageService }
