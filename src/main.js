@@ -41,7 +41,7 @@ async function configIntegration() {
     store,
     vuetify,
     render: h => h(App)
-  }).$mount('#app')
+  }).$mount('#blockchainStore')
 }
 
 configIntegration()

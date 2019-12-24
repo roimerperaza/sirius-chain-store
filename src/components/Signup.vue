@@ -179,8 +179,10 @@ export default {
     },
     submit() {
       this.sendingForm = true;
+      this.$store.dispatch('showOverlay', true)
       setTimeout(() => {
         const save = this.$storage.saveUser(this.formValue);
+        this.$store.dispatch('showOverlay', false)
         this.reset();
       }, 2500);
     },

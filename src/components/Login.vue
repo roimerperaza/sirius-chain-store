@@ -84,14 +84,17 @@ export default {
     },
     submit() {
       this.sendingForm = true;
+      this.$store.dispatch('showOverlay', true)
       setTimeout(() => {
         const login = this.$storage.login(this.username, this.password);
         if (login) {
           this.sendingForm = false;
+          this.$store.dispatch('showOverlay', false)
           this.$store.dispatch('login', login)
           this.$router.push('/home').catch(e => {})
         }else {
           this.sendingForm = false;
+          this.$store.dispatch('showOverlay', false)
           this.$router.push('/home').catch(e => {})
         }
       }, 1500);
