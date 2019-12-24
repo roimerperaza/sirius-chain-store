@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid" ref="form">
+  <v-form v-model="isValidForm" ref="form">
     <v-container>
       <v-row>
         <v-col cols="9" class="mx-auto">
@@ -42,6 +42,7 @@
                 name="password"
                 hint
                 @click:append="configForm.password.show = !configForm.password.show"
+                @keyup.enter="submit"
               ></v-text-field>
             </v-col>
 
@@ -54,7 +55,7 @@
             <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
               <v-btn
                 :loading="sendingForm"
-                :disabled="!valid || sendingForm"
+                :disabled="!isValidForm || sendingForm"
                 outlined
                 color="fantasy"
                 @click="submit"
@@ -68,41 +69,47 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   data: () => ({
     sendingForm: false,
     configForm: null,
-    valid: false,
+    isValidForm: false,
     username: "",
     password: ""
   }),
   methods: {
+    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
     deleteSpaces() {
       if (this.username) {
         this.username = this.username.replace(/ /g, "");
       }
     },
     submit() {
-      this.sendingForm = true;
-      this.$store.dispatch('showOverlay', true)
-      setTimeout(() => {
-        const login = this.$storage.login(this.username, this.password);
-        if (login) {
-          this.sendingForm = false;
-          this.$store.dispatch('showOverlay', false)
-          this.$store.dispatch('login', login)
-          this.$router.push('/home').catch(e => {})
-        }else {
-          this.sendingForm = false;
-          this.$store.dispatch('showOverlay', false)
-          this.$router.push('/home').catch(e => {})
-        }
-      }, 1500);
+      if (this.isValidForm) {
+        this.sendingForm = true;
+        this.SHOW_LOADING(true);
+        setTimeout(() => {
+          const login = this.$storage.login(this.username, this.password);
+          if (login) {
+            this.sendingForm = false;
+            this.SHOW_LOADING(false);
+            this.LOGIN(login);
+            this.SHOW_SNACKBAR({snackbar: true, text: `Hi ${login.name}, welcome!`, color: 'success'});
+            this.$router.push("/home").catch(e => {});
+          } else {
+            this.sendingForm = false;
+            this.SHOW_LOADING(false);
+            this.SHOW_SNACKBAR({snackbar: true, text: 'Invalid username or password', color: 'errorIntense'});
+            this.$router.push("/home").catch(e => {});
+          }
+        }, 1500);
+      }
     },
     reset() {
       this.sendingForm = false;
       this.$refs.form.reset();
-    },
+    }
   },
   watch: {
     user() {

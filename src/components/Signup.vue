@@ -137,6 +137,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   data: () => ({
     configForm: null,
@@ -172,6 +173,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
     deleteSpaces(input) {
       if (this.formValue[input]) {
         this.formValue[input] = this.formValue[input].replace(/ /g, "");
@@ -179,10 +181,11 @@ export default {
     },
     submit() {
       this.sendingForm = true;
-      this.$store.dispatch('showOverlay', true)
+      this.SHOW_LOADING(true);
       setTimeout(() => {
         const save = this.$storage.saveUser(this.formValue);
-        this.$store.dispatch('showOverlay', false)
+        this.SHOW_LOADING(false);
+        this.SHOW_SNACKBAR({snackbar: true, text: `Registered user successfully`, color: 'success'});
         this.reset();
       }, 2500);
     },
