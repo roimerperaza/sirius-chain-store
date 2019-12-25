@@ -169,7 +169,11 @@ export default {
     },
     passwordConfirmationRule() {
       return () =>
-        this.$utils.isMatch(this.formValue.password, this.formValue.confirmPassword, "Password");
+        this.$utils.isMatch(
+          this.formValue.password,
+          this.formValue.confirmPassword,
+          "Password"
+        );
     }
   },
   methods: {
@@ -185,8 +189,20 @@ export default {
       setTimeout(() => {
         const save = this.$storage.saveUser(this.formValue);
         this.SHOW_LOADING(false);
-        this.SHOW_SNACKBAR({snackbar: true, text: `Registered user successfully`, color: 'success'});
-        this.reset();
+        if (save) {
+          this.reset();
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Registered user successfully`,
+            color: "success"
+          });
+        } else {
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Has ocurred a error`,
+            color: "error"
+          });
+        }
       }, 2500);
     },
     reset() {
@@ -197,7 +213,10 @@ export default {
     },
     validateUsername() {
       const username = this.formValue.username;
-      const validation = username && username !== "" && username.length >= this.configForm.username.min;
+      const validation =
+        username &&
+        username !== "" &&
+        username.length >= this.configForm.username.min;
       if (validation) {
         this.searchingUser = true;
         setTimeout(() => {
@@ -220,7 +239,10 @@ export default {
   },
   created() {
     this.configForm = this.$utils.getConfigForm();
-    this.debouncedValidateUsername = this.lodash.debounce(this.validateUsername, 500);
+    this.debouncedValidateUsername = this.lodash.debounce(
+      this.validateUsername,
+      500
+    );
   }
 };
 </script>

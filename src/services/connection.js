@@ -10,36 +10,33 @@ import {
 } from 'tsjs-xpx-chain-sdk'
 
 class Connections {
-  constructor (node) {
-    this.node = node
-    this.accountHttp = new AccountHttp(this.node)
-    this.blockHttp = new BlockHttp(this.node)
-    this.chainHttp = new ChainHttp(this.node)
-    this.diagnosticHttp = new DiagnosticHttp(this.node)
-    this.metadataHttp = new MetadataHttp(this.node)
-    this.mosaicHttp = new MosaicHttp(this.node)
-    this.namespaceHttp = new NamespaceHttp(this.node)
-    this.transactionHttp = new TransactionHttp(this.node)
-  }
-}
-
-class ConnectionData {
-  constructor () {
-    this.url = ''
+  constructor(node, protocol) {
+    const url = this.getBuildUrl(node, protocol)
+    console.log('URL ---->', url);
+    this.accountHttp = new AccountHttp(node)
+    this.blockHttp = new BlockHttp(node)
+    this.chainHttp = new ChainHttp(node)
+    this.diagnosticHttp = new DiagnosticHttp(node)
+    this.metadataHttp = new MetadataHttp(node)
+    this.mosaicHttp = new MosaicHttp(node)
+    this.namespaceHttp = new NamespaceHttp(node)
+    this.transactionHttp = new TransactionHttp(node)
   }
 
-  static getBuildUrl (node, protocol) {
+  getBuildUrl(node, protocol) {
+    let url = null
     switch (protocol) {
       case 'http':
-        this.url = `${protocol}://${node}:3000`
+        url = `${protocol}://${node}:3000`
         break
       case 'https':
-        this.url = `${protocol}://${node}:443`
+        url = `${protocol}://${node}:443`
         break
     }
 
-    return this.url
+    console.log('ESTA ES LA URL', url);
+    return url
   }
 }
 
-export { Connections, ConnectionData }
+export { Connections }

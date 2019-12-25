@@ -35,7 +35,6 @@ import { mapState } from "vuex";
 
 export default {
   name: "App",
-  data: () => ({}),
   computed: {
     ...mapState(["overlay", "snackbar"])
   }

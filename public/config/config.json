@@ -1,5 +1,5 @@
 {
-  "version": "TESTNET",
+  "version": "TEST_NET",
   "environment": {
     "TESTNET": {
       "coin": "xpx",
@@ -11,14 +11,14 @@
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
       },
-      "nodes": [
-        "18.138.51.117",
-        "13.229.155.165",
-        "13.251.128.180"
-      ],
-      "networkType": {
-        "name": "PublicTest",
-        "number": 168
+      "connectionNodes": {
+        "networkType": "TEST_NET",
+        "protocol": "http",
+        "nodes": [
+          "18.138.51.117",
+          "13.229.155.165",
+          "13.251.128.180"
+        ]
       },
       "rentalFeeSink": {
         "namespaceRentalFeeSink": {
@@ -44,14 +44,14 @@
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
       },
-      "nodes": [
-        "18.138.51.117",
-        "13.229.155.165",
-        "13.251.128.180"
-      ],
-      "networkType": {
-        "name": "PublicTest",
-        "number": 168
+      "connectionNodes": {
+        "networkType": "MAIN_NET",
+        "protocol": "https",
+        "nodes": [
+          "18.138.51.117",
+          "13.229.155.165",
+          "13.251.128.180"
+        ]
       },
       "rentalFeeSink": {
         "namespaceRentalFeeSink": {

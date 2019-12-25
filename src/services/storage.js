@@ -1,3 +1,5 @@
+import {ProximaxProvider} from './proximaxProvider'
+
 class StorageService {
 
     storage = null;
