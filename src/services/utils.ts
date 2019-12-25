@@ -1,0 +1,84 @@
+export default class Utils {
+
+  /**
+   *
+   *
+   * @static
+   * @returns
+   * @memberof Utils
+   */
+  static getConfigForm() {
+    return {
+      generalRules: {
+        notAllowSpaces: (v: any) => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
+      },
+      username: {
+        label: "Username",
+        min: 4,
+        max: 10,
+        rules: {
+          required: (v: any) => !!v || "Username is required",
+          min: (v: string | any[]) => v && v.length >= 4 || "Username must be less than 4 characters",
+          max: (v: string | any[]) => v && v.length <= 10 || "Username must be a maximum of 10 characters"
+        }
+      },
+      name: {
+        label: "Name",
+        min: 3,
+        max: 20,
+        rules: {
+          required: (v: any) => !!v || "Name is required",
+          min: (v: string | any[]) => v && v.length >= 3 || "Name must be less than 3 characters",
+          max: (v: string | any[]) => v && v.length <= 20 || "Name must be a maximum of 20 characters"
+        }
+      },
+      lastname: {
+        label: "Last name",
+        min: 3,
+        max: 20,
+        rules: {
+          required: (v: any) => !!v || "Last name is required",
+          min: (v: string | any[]) => v && v.length >= 3 || "Last name must be less than 3 characters",
+          max: (v: string | any[]) => v && v.length <= 20 || "Last name must be a maximum of 20 characters"
+        }
+      },
+      password: {
+        label: "Password",
+        min: 8,
+        max: 20,
+        show: false,
+        showConfirm: false,
+        rules: {
+          required: (value: any) => !!value || "Password is required",
+          min: (v: string | any[]) => v && v.length >= 8 || "Password must be less than 8 characters",
+          max: (v: string | any[]) => v && v.length <= 20 || "Password must be a maximum of 20 characters"
+        }
+      },
+      email: {
+        label: "Email",
+        min: 5,
+        max: 30,
+        rules: {
+          required: (v: any) => !!v || "E-mail is required",
+          min: (v: string | any[]) => v && v.length >= 5 || "Email must be less than 5 characters",
+          max: (v: string | any[]) => v && v.length <= 30 || "Email must be a maximum of 30 characters",
+          isValid: (v: string) => /.+@.+/.test(v) || "E-mail must be valid"
+        }
+      }
+    }
+  }
+
+  /**
+   *
+   *
+   * @static
+   * @param {*} value1
+   * @param {*} value2
+   * @param {string} [nameValidation='']
+   * @returns
+   * @memberof Utils
+   */
+  static isMatch(value1: string, value2: string, nameValidation: string = '') {
+    return value1 === value2 || `${nameValidation} must match`;
+  }
+}
