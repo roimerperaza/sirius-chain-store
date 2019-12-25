@@ -139,9 +139,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapMutations } from "vuex";
+import GeneralMixin from "../mixins/general";
 
 export default Vue.extend({
   name: "Signup",
+  mixins: [GeneralMixin],
   data: () => ({
     configForm: null,
     sendingForm: false,

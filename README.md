@@ -1,4 +1,4 @@
-# blockchain-store-ts
+# blockchain-store
 
 ## Project setup
 ```

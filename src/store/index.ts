@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import SystemConfigInterface from '../interfaces/General'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    configInfo: null,
+    configInfo: {},
     environment: null,
     isLogged: false,
     dataUser: null,
@@ -21,7 +22,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    ADD_CONFIG_INFO(state, data: any) {
+    ADD_CONFIG_INFO(state, data: SystemConfigInterface.RootObjectConfig) {
       state.configInfo = data
     },
     LOGIN(state, data) {
