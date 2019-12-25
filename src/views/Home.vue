@@ -1,18 +1,30 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <v-layout>
+      <v-container>
+        IS HOME <br>
+        <v-btn @click="goToHome(true)">LOG OUT</v-btn> <br><br>
+        <v-btn @click="goToHome(false)">GO TO LOGIN</v-btn>
+      </v-container>
+    </v-layout>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapMutations } from "vuex";
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+  data: () => ({
+  }),
+  methods: {
+     ...mapMutations(["LOGIN"]),
+    goToHome(logout) {
+      if (logout) {
+        this.LOGIN(null)
+      }
+
+      this.$router.push('/auth').catch(e => {})
+    }
+  },
+};
 </script>

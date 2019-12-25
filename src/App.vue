@@ -1,32 +1,44 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<template >
+  <v-app>
+    <!-- Overlay -->
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+
+    <!-- Message -->
+    <v-snackbar
+      v-model="snackbar.snackbar"
+      :bottom="snackbar.y === 'bottom'"
+      :top="snackbar.y === 'top'"
+      :right="snackbar.x === 'right'"
+      :left="snackbar.x === 'left'"
+      :vertical="snackbar.mode === 'vertical'"
+      :color="snackbar.color"
+      :multi-line="snackbar.mode === 'multi-line'"
+      :timeout="snackbar.timeout"
+    >
+      {{ snackbar.text }}
+      <v-btn dark text @click="snackbar.snackbar = false">Close</v-btn>
+    </v-snackbar>
+
+    <!-- Content -->
+    <v-content>
+      <v-container style="height: 100%;">
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
+<script lang="ts">
+import Vue from "vue";
+import { mapState } from "vuex";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default Vue.extend({
+  name: "App",
+  computed: {
+    ...mapState(["overlay", "snackbar"])
+  }
+});
+</script>
