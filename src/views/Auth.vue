@@ -5,6 +5,7 @@
         <v-card class="mx-auto" >
           <v-container class="p-0">
             <v-row class="mx-auto">
+              <!-- Carousel -->
               <v-col cols="12" sm="5" md="4" class="p-0 d-none d-sm-block">
                 <v-carousel cycle :show-arrows="showArrows">
                   <v-carousel-item
@@ -78,7 +79,6 @@ export default {
   methods: {
     changeTheme() {
       this.$vuetify.theme.isDark = !this.$vuetify.theme.isDark;
-      console.log(this.$vuetify);
       const theme = this.$vuetify.theme.isDark
         ? this.$vuetify.theme.themes.dark
         : this.$vuetify.theme.themes.light;

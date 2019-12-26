@@ -76,43 +76,18 @@ import accountMixin from "../mixins/account";
 export default {
   mixins: [generalMixins, accountMixin],
   data: () => ({
-    sendingForm: false,
     configForm: null,
     isValidForm: false,
-    username: "",
-    password: ""
+    password: "",
+    sendingForm: false,
+    username: ""
   }),
   created() {
     this.configForm = this.$utils.getConfigForm();
   },
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
-    submit() {
-      if (this.isValidForm) {
-        this.sendingForm = true;
-        this.SHOW_LOADING(true);
-        setTimeout(() => {
-          const userData = this.decrypt(this.username, this.password);
-          if (userData) {
-            this.$router.push("/home").catch(e => {});
-            this.LOGIN(userData);
-            this.emitEventForm(
-              `Hi ${userData.name}, welcome!`,
-              "success",
-              false
-            );
-            this.$router.push("/home").catch(e => {});
-          } else {
-            this.emitEventForm(
-              "Invalid username or password",
-              "errorIntense",
-              false
-            );
-          }
-        }, 1000);
-      }
-    },
-    emitEventForm(text, color, status) {
+    emitEventForm(text, color, status = false) {
       this.sendingForm = false;
       this.SHOW_LOADING(status);
       this.SHOW_SNACKBAR({
@@ -120,6 +95,22 @@ export default {
         text: text,
         color: color
       });
+    },
+    submit() {
+      if (this.isValidForm) {
+        this.sendingForm = true;
+        this.SHOW_LOADING(true);
+        setTimeout(() => {
+          const userData = this.decrypt(this.username, this.password);
+          if (userData) {
+            this.LOGIN(userData);
+            this.emitEventForm(`Hi ${userData.name}, welcome!`, "success");
+            this.$router.push("/home").catch(e => {});
+          } else {
+            this.emitEventForm("Invalid username or password", "errorIntense");
+          }
+        }, 500);
+      }
     },
     reset() {
       this.sendingForm = false;

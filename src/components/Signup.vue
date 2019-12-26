@@ -198,7 +198,7 @@ export default {
             color: "error"
           });
         }
-      }, 1000);
+      }, 500);
     },
     reset() {
       this.userIsRepeat = false;
@@ -212,15 +212,15 @@ export default {
       if (usr && usr !== "" && usr.length >= min) {
         this.searchingUser = true;
         setTimeout(() => {
-          if (this.getByUsername(username)) {
+          if (this.getByUsername(usr)) {
             this.searchingUser = false;
-            this.userIsRepeat = `${username} already exists, try another user.`;
+            this.userIsRepeat = `${usr} already exists, try another user.`;
             return;
           }
 
           this.userIsRepeat = false;
           this.searchingUser = false;
-        }, 1000);
+        }, 500);
       }
     }
   },

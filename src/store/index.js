@@ -24,8 +24,8 @@ export default new Vuex.Store({
       state.configInfo = data
     },
     LOGIN(state, data) {
-      state.isLogged = (data) ? true : false;
-      state.dataUser = data;
+      state.isLogged = (data && data.username && data.simpleWallet) ? true : false
+      state.dataUser = data
     },
     SHOW_LOADING(state, value) {
       state.overlay = value
@@ -38,7 +38,7 @@ export default new Vuex.Store({
   },
   actions: {
     LOGOUT({ commit }, data) {
-      console.log('LOGOUT', data);
+      commit('LOGIN', null)
     }
   },
   modules: {

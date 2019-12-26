@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs'
 import { crypto } from 'js-xpx-chain-library';
 import {
   Account,
@@ -12,7 +11,8 @@ import {
   Password,
   DiagnosticHttp,
   MetadataHttp,
-  NetworkType
+  NetworkType,
+  Address
 } from 'tsjs-xpx-chain-sdk'
 
 class ProximaxProvider {
@@ -78,6 +78,17 @@ class ProximaxProvider {
   /**
    *
    *
+   * @param {*} address
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  createFromRawAddress (address) {
+    return Address.createFromRawAddress(address)
+  }
+
+  /**
+   *
+   *
    * @param {*} privateKey
    * @param {*} network
    * @param {*} address
@@ -100,19 +111,15 @@ class ProximaxProvider {
   decrypt(common, account, network = this.typeNetwork) {
     try {
       if (account && account.encrypted !== '' && common) {
-        console.log('SI PASO 2....', account, account.algo);
         if (!crypto.passwordToPrivatekey(common, account, account.algo)) {
           return { status: false, msg: 'Invalid password' };
         }
 
-        console.log('SI PASO....');
         if (common.isHW) {
           return { status: true, msg: '' };
         }
 
-        console.log('SI PASO 2....');
-
-        if (!this.isPrivateKeyValid(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
+        if (!this.isValidPrivateKey(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
           return { status: false, msg: 'Invalid password' };
         }
 
@@ -121,7 +128,6 @@ class ProximaxProvider {
         return { status: false, msg: 'You do not have a valid account selected' };
       }
     } catch (error) {
-      console.log(error)
       return { status: false, msg: 'You do not have a valid account selected.' };
     }
   }
@@ -133,7 +139,7 @@ class ProximaxProvider {
    * @returns
    * @memberof ProximaxProvider
    */
-  isPrivateKeyValid(privateKey) {
+  isValidPrivateKey(privateKey) {
     if (privateKey.length !== 64 && privateKey.length !== 66) {
       // console.error('Private key length must be 64 or 66 characters !');
       return false;
