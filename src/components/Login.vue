@@ -19,7 +19,7 @@
                   configForm.generalRules.notAllowSpaces
                 ]"
                 :label="configForm.username.label"
-                @keyup="deleteSpaces()"
+                @keyup="username = removeSpaces(username)"
               ></v-text-field>
             </v-col>
 
@@ -70,7 +70,11 @@
 
 <script>
 import { mapMutations } from "vuex";
+import generalMixins from "../mixins/general";
+import accountMixin from "../mixins/account"
+
 export default {
+  mixins: [generalMixins, accountMixin],
   data: () => ({
     sendingForm: false,
     configForm: null,
@@ -80,27 +84,30 @@ export default {
   }),
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
-    deleteSpaces() {
-      if (this.username) {
-        this.username = this.username.replace(/ /g, "");
-      }
-    },
     submit() {
       if (this.isValidForm) {
         this.sendingForm = true;
         this.SHOW_LOADING(true);
         setTimeout(() => {
-          const login = this.$storage.login(this.username, this.password);
+          const login = this.login(this.username, this.password);
           if (login) {
             this.sendingForm = false;
             this.SHOW_LOADING(false);
             this.LOGIN(login);
-            this.SHOW_SNACKBAR({snackbar: true, text: `Hi ${login.name}, welcome!`, color: 'success'});
+            this.SHOW_SNACKBAR({
+              snackbar: true,
+              text: `Hi ${login.name}, welcome!`,
+              color: "success"
+            });
             this.$router.push("/home").catch(e => {});
           } else {
             this.sendingForm = false;
             this.SHOW_LOADING(false);
-            this.SHOW_SNACKBAR({snackbar: true, text: 'Invalid username or password', color: 'errorIntense'});
+            this.SHOW_SNACKBAR({
+              snackbar: true,
+              text: "Invalid username or password",
+              color: "errorIntense"
+            });
             this.$router.push("/home").catch(e => {});
           }
         }, 1500);

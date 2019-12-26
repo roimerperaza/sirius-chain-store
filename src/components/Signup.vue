@@ -15,7 +15,7 @@
                 :counter="configForm.name.max"
                 :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.name.label"
-                @keyup="deleteSpaces('name')"
+                @keyup="formValue.name = removeSpaces(formValue.name)"
               ></v-text-field>
             </v-col>
 
@@ -29,7 +29,7 @@
                 :counter="configForm.lastname.max"
                 :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.lastname.label"
-                @keyup="deleteSpaces('lastname')"
+                @keyup="formValue.lastname = removeSpaces(formValue.lastname)"
               ></v-text-field>
             </v-col>
 
@@ -51,7 +51,7 @@
                   userIsRepeat
                 ]"
                 :label="configForm.username.label"
-                @keyup="deleteSpaces('username')"
+                @keyup="formValue.username = removeSpaces(formValue.username)"
               ></v-text-field>
             </v-col>
 
@@ -64,7 +64,7 @@
                 :counter="configForm.email.max"
                 :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid, configForm.generalRules.notAllowSpaces]"
                 :label="configForm.email.label"
-                @keyup="deleteSpaces('email')"
+                @keyup="formValue.email = removeSpaces(formValue.email)"
               ></v-text-field>
             </v-col>
 
@@ -106,7 +106,7 @@
                   configForm.password.rules.required,
                   configForm.password.rules.min,
                   configForm.password.rules.max,
-                  passwordConfirmationRule
+                  isMatch(formValue.password, formValue.confirmPassword, 'Password')
                 ]"
                 :type="configForm.password.showConfirm ? 'text' : 'password'"
                 :disabled="disabledConfirmPassword"
@@ -138,7 +138,11 @@
 
 <script>
 import { mapMutations } from "vuex";
+import generalMixins from "../mixins/general"
+import accountMixin from "../mixins/account"
+
 export default {
+  mixins: [generalMixins, accountMixin],
   data: () => ({
     configForm: null,
     sendingForm: false,
@@ -166,28 +170,16 @@ export default {
       } else {
         return true;
       }
-    },
-    passwordConfirmationRule() {
-      return () =>
-        this.$utils.isMatch(
-          this.formValue.password,
-          this.formValue.confirmPassword,
-          "Password"
-        );
     }
   },
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
-    deleteSpaces(input) {
-      if (this.formValue[input]) {
-        this.formValue[input] = this.formValue[input].replace(/ /g, "");
-      }
-    },
     submit() {
       this.sendingForm = true;
       this.SHOW_LOADING(true);
       setTimeout(() => {
-        const save = this.$storage.saveUser(this.formValue);
+        console.log();
+        const save = this.saveUser(this.formValue);
         this.SHOW_LOADING(false);
         if (save) {
           this.reset();
@@ -220,7 +212,7 @@ export default {
       if (validation) {
         this.searchingUser = true;
         setTimeout(() => {
-          if (validation && this.$storage.getUserByUsername(username)) {
+          if (validation && this.getByUsername(username)) {
             this.searchingUser = false;
             this.userIsRepeat = `${username} already exists, try another user.`;
             return;

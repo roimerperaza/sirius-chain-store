@@ -11,9 +11,7 @@ import store from './store'
 import Utils from './services/utils'
 import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
-import { Connections } from './services/connection'
-// import { Config } from './services/config'
-// import { ProximaxProvider } from './services/proximaxProvider'
+import { ProximaxProvider } from './services/proximaxProvider'
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)
@@ -28,17 +26,20 @@ const configIntegration = async function () {
   try {
     const configInfo = await axios.get('../config/config.json')
     store.commit('ADD_CONFIG_INFO', configInfo.data)
-    // Vue.prototype.$config = new Config(environment)
-    // const connection = new Connections(Vue.prototype.$config.nodes[0])
-    // console.log('----connection----', connection)
-    // Vue.prototype.$provider = new Connections(Vue.prototype.$config.nodes[0])
-    // Vue.prototype.$proximaxProvider = new ProximaxProvider(null)
+    const environment = getEnvironment(configInfo.data)
+    Vue.prototype.$environment = environment
+    Vue.prototype.$proximaxProvider = new ProximaxProvider(
+      environment.connectionNodes.nodes[0],
+      environment.connectionNodes.protocol
+    )
+
   } catch (e) {
     console.error(e)
   }
 }
 
-const selectEnvironment = function (configInfo) {
+
+const getEnvironment = function (configInfo) {
   let environment = null
   switch (configInfo.version) {
     case 'TEST_NET':

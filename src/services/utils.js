@@ -15,13 +15,13 @@ export default class Utils {
       username: {
         label: "Username",
         min: 4,
-        max: 10,
+        max: 15,
         rules: {
           required: v => !!v || "Username is required",
           min: v =>
             v && v.length >= 4 || "Username must be less than 4 characters",
           max: v =>
-            v && v.length <= 10 || "Username must be a maximum of 10 characters"
+            v && v.length <= 15 || "Username must be a maximum of 15 characters"
         }
       },
       name: {
@@ -57,35 +57,21 @@ export default class Utils {
           min: v =>
             v && v.length >= 8 || "Password must be less than 8 characters",
           max: v =>
-            v && v.length <= 20 || "Password must be a maximum of 20 characters"
+            v && v.length <= 25 || "Password must be a maximum of 25 characters"
         }
       },
       email: {
         label: "Email",
         min: 5,
-        max: 30,
+        max: 40,
         rules: {
           required: v => !!v || "E-mail is required",
           min: v => v && v.length >= 5 || "Email must be less than 5 characters",
           max: v =>
-            v && v.length <= 30 || "Email must be a maximum of 30 characters",
+            v && v.length <= 40 || "Email must be a maximum of 40 characters",
           isValid: v => /.+@.+/.test(v) || "E-mail must be valid"
         }
       }
     }
-  }
-
-  /**
-   *
-   *
-   * @static
-   * @param {*} value1
-   * @param {*} value2
-   * @param {string} [nameValidation='']
-   * @returns
-   * @memberof Utils
-   */
-  static isMatch(value1, value2, nameValidation = '') {
-    return value1 === value2 || `${nameValidation} must match`;
   }
 }
