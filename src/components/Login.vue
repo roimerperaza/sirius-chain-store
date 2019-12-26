@@ -71,7 +71,7 @@
 <script>
 import { mapMutations } from "vuex";
 import generalMixins from "../mixins/general";
-import accountMixin from "../mixins/account"
+import accountMixin from "../mixins/account";
 
 export default {
   mixins: [generalMixins, accountMixin],
@@ -82,6 +82,9 @@ export default {
     username: "",
     password: ""
   }),
+  created() {
+    this.configForm = this.$utils.getConfigForm();
+  },
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
     submit() {
@@ -89,42 +92,39 @@ export default {
         this.sendingForm = true;
         this.SHOW_LOADING(true);
         setTimeout(() => {
-          const login = this.login(this.username, this.password);
-          if (login) {
-            this.sendingForm = false;
-            this.SHOW_LOADING(false);
-            this.LOGIN(login);
-            this.SHOW_SNACKBAR({
-              snackbar: true,
-              text: `Hi ${login.name}, welcome!`,
-              color: "success"
-            });
+          const userData = this.decrypt(this.username, this.password);
+          if (userData) {
+            this.$router.push("/home").catch(e => {});
+            this.LOGIN(userData);
+            this.emitEventForm(
+              `Hi ${userData.name}, welcome!`,
+              "success",
+              false
+            );
             this.$router.push("/home").catch(e => {});
           } else {
-            this.sendingForm = false;
-            this.SHOW_LOADING(false);
-            this.SHOW_SNACKBAR({
-              snackbar: true,
-              text: "Invalid username or password",
-              color: "errorIntense"
-            });
-            this.$router.push("/home").catch(e => {});
+            this.emitEventForm(
+              "Invalid username or password",
+              "errorIntense",
+              false
+            );
           }
-        }, 1500);
+        }, 1000);
       }
+    },
+    emitEventForm(text, color, status) {
+      this.sendingForm = false;
+      this.SHOW_LOADING(status);
+      this.SHOW_SNACKBAR({
+        snackbar: true,
+        text: text,
+        color: color
+      });
     },
     reset() {
       this.sendingForm = false;
       this.$refs.form.reset();
     }
-  },
-  watch: {
-    user() {
-      this.user = this.user.replace(/ /g, "");
-    }
-  },
-  created() {
-    this.configForm = this.$utils.getConfigForm();
   }
 };
 </script>

@@ -30,9 +30,9 @@ const configIntegration = async function () {
     Vue.prototype.$environment = environment
     Vue.prototype.$proximaxProvider = new ProximaxProvider(
       environment.connectionNodes.nodes[0],
-      environment.connectionNodes.protocol
+      environment.connectionNodes.protocol,
+      environment.connectionNodes.networkType
     )
-
   } catch (e) {
     console.error(e)
   }

@@ -36,7 +36,11 @@ export default new Vuex.Store({
       state.snackbar.color = data.color
     }
   },
-  actions: {},
+  actions: {
+    LOGOUT({ commit }, data) {
+      console.log('LOGOUT', data);
+    }
+  },
   modules: {
   }
 })

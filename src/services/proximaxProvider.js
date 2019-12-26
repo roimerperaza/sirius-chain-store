@@ -1,5 +1,7 @@
 import { BehaviorSubject } from 'rxjs'
+import { crypto } from 'js-xpx-chain-library';
 import {
+  Account,
   BlockHttp,
   ChainHttp,
   MosaicHttp,
@@ -10,13 +12,13 @@ import {
   Password,
   DiagnosticHttp,
   MetadataHttp,
-  Address
+  NetworkType
 } from 'tsjs-xpx-chain-sdk'
 
 class ProximaxProvider {
-  constructor(node, protocol) {
+  constructor(node, protocol, typeNetwork) {
     this.url = this.buildURL(node, protocol)
-    // this.socketURL = new Listener(`${protocolWs}://${node}`, WebSocket)
+    this.typeNetwork = NetworkType[typeNetwork];
     this.accountHttp = new AccountHttp(this.url)
     this.blockHttp = new BlockHttp(this.url)
     this.chainHttp = new ChainHttp(this.url)
@@ -54,12 +56,12 @@ class ProximaxProvider {
    *
    * @param {*} walletName
    * @param {*} password
-   * @param {*} network
+   * @param {*} [network=this.typeNetwork]
    * @returns
    * @memberof ProximaxProvider
    */
-  createAccountSimple(walletName, password, network) {
-    return SimpleWallet.create(walletName, password, network);
+  createAccountSimple(walletName, password, network = this.typeNetwork) {
+    return SimpleWallet.create(walletName, this.createPassword(password), network);
   }
 
   /**
@@ -69,8 +71,89 @@ class ProximaxProvider {
    * @returns
    * @memberof ProximaxProvider
    */
-  createPassword(value) {
-    return new Password(value);
+  createPassword(password) {
+    return new Password(password);
+  }
+
+  /**
+   *
+   *
+   * @param {*} privateKey
+   * @param {*} network
+   * @param {*} address
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  checkAddress(privateKey, network, address) {
+    return (Account.createFromPrivateKey(privateKey, network).address.plain() === address) ? true : false;
+  }
+
+  /**
+   *
+   *
+   * @param {*} common
+   * @param {*} account
+   * @param {*} [network=this.typeNetwork]
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  decrypt(common, account, network = this.typeNetwork) {
+    try {
+      if (account && account.encrypted !== '' && common) {
+        console.log('SI PASO 2....', account, account.algo);
+        if (!crypto.passwordToPrivatekey(common, account, account.algo)) {
+          return { status: false, msg: 'Invalid password' };
+        }
+
+        console.log('SI PASO....');
+        if (common.isHW) {
+          return { status: true, msg: '' };
+        }
+
+        console.log('SI PASO 2....');
+
+        if (!this.isPrivateKeyValid(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
+          return { status: false, msg: 'Invalid password' };
+        }
+
+        return { status: true, msg: '' };
+      } else {
+        return { status: false, msg: 'You do not have a valid account selected' };
+      }
+    } catch (error) {
+      console.log(error)
+      return { status: false, msg: 'You do not have a valid account selected.' };
+    }
+  }
+
+  /**
+   *
+   *
+   * @param {*} privateKey
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  isPrivateKeyValid(privateKey) {
+    if (privateKey.length !== 64 && privateKey.length !== 66) {
+      // console.error('Private key length must be 64 or 66 characters !');
+      return false;
+    } else if (!this.isHexadecimal(privateKey)) {
+      // console.error('Private key must be hexadecimal only !');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   *
+   *
+   * @param {*} str
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  isHexadecimal(str) {
+    return str.match('^(0x|0X)?[a-fA-F0-9]+$') !== null;
   }
 }
 

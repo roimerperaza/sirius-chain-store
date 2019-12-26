@@ -1,35 +1,64 @@
 export default {
     methods: {
-        login(username, password) {
-            const user = this.getByUsername(username);
-            if (user && user.password === password) {
-                return user;
+        decrypt(username, password) {
+            const userData = this.getByUsername(username)
+            if (userData) {
+                const common = { password: password }
+                const account = {
+                    address: userData.simpleWallet.address['address'],
+                    algo: 'pass:bip32',
+                    encrypted: userData.simpleWallet.encryptedPrivateKey.encryptedKey,
+                    iv: userData.simpleWallet.encryptedPrivateKey.iv,
+                }
+
+                const decrypt = this.$proximaxProvider.decrypt(common, account)
+                if (decrypt) {
+                    return userData;
+                }
             }
-    
+
             return null;
         },
         getByUsername(username) {
-            const users = JSON.parse(this.getUsers());
+            const users = this.getUsers();
             if (users && users.length > 0) {
                 return users.find(x => x.username === username);
             }
-    
+
             return null;
         },
         getUsers() {
-            let users = this.$storage.get(`users`);
+            const users = this.$storage.get(`users`);
             if (!users) {
-                this.set(`users`, []);
-                users = this.getUsers();
+                this.$storage.set(`users`, []);
+                return [];
             }
-    
-            return users;
+
+            return JSON.parse(users);
         },
-        saveUser(user) {
-            const users = JSON.parse(this.getUsers());
-            users.push(user);
-            this.$storage.set(`users`, users);
-            return true;
+        saveUser(data) {
+            try {
+                const users = this.getUsers();
+                if (!this.getByUsername(data.username)) {
+                    const toSave = {
+                        username: data.username,
+                        name: data.name,
+                        lastname: data.lastname,
+                        email: data.email,
+                        algo: 'pass:bip32'
+                    }
+
+                    toSave['simpleWallet'] = this.$proximaxProvider.createAccountSimple(data.username, data.password);
+                    users.push(toSave);
+                    this.$storage.set(`users`, users);
+                    return toSave;
+                }
+
+                return null;
+            } catch (error) {
+                return null;
+            }
+
         }
     }
 };

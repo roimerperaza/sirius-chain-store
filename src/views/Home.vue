@@ -11,18 +11,19 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   data: () => ({
   }),
   methods: {
-    ...mapMutations(["LOGIN"]),
+    ...mapActions(["LOGOUT"]),
     goToHome(logout) {
       if (logout) {
-        this.LOGIN(null)
+        this.LOGOUT(null)
       }
 
+      
       this.$router.push('/auth').catch(e => {})
     }
   },

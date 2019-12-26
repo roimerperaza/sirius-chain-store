@@ -138,8 +138,8 @@
 
 <script>
 import { mapMutations } from "vuex";
-import generalMixins from "../mixins/general"
-import accountMixin from "../mixins/account"
+import generalMixins from "../mixins/general";
+import accountMixin from "../mixins/account";
 
 export default {
   mixins: [generalMixins, accountMixin],
@@ -158,6 +158,10 @@ export default {
       email: ""
     }
   }),
+  created() {
+    this.configForm = this.$utils.getConfigForm();
+    this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500);
+  },
   computed: {
     disabledConfirmPassword() {
       const password = this.formValue.password;
@@ -178,7 +182,6 @@ export default {
       this.sendingForm = true;
       this.SHOW_LOADING(true);
       setTimeout(() => {
-        console.log();
         const save = this.saveUser(this.formValue);
         this.SHOW_LOADING(false);
         if (save) {
@@ -195,7 +198,7 @@ export default {
             color: "error"
           });
         }
-      }, 2500);
+      }, 1000);
     },
     reset() {
       this.userIsRepeat = false;
@@ -203,16 +206,13 @@ export default {
       this.sendingForm = false;
       this.$refs.form.reset();
     },
-    validateUsername() {
-      const username = this.formValue.username;
-      const validation =
-        username &&
-        username !== "" &&
-        username.length >= this.configForm.username.min;
-      if (validation) {
+    validateUser() {
+      const usr = this.formValue.username;
+      const min = this.configForm.username.min;
+      if (usr && usr !== "" && usr.length >= min) {
         this.searchingUser = true;
         setTimeout(() => {
-          if (validation && this.getByUsername(username)) {
+          if (this.getByUsername(username)) {
             this.searchingUser = false;
             this.userIsRepeat = `${username} already exists, try another user.`;
             return;
@@ -220,21 +220,14 @@ export default {
 
           this.userIsRepeat = false;
           this.searchingUser = false;
-        }, 1500);
+        }, 1000);
       }
     }
   },
   watch: {
     "formValue.username"(newVal) {
-      this.debouncedValidateUsername();
+      this.debouncedValidateUser();
     }
-  },
-  created() {
-    this.configForm = this.$utils.getConfigForm();
-    this.debouncedValidateUsername = this.lodash.debounce(
-      this.validateUsername,
-      500
-    );
   }
 };
 </script>
