@@ -1,5 +1,7 @@
 {
   "version": "TEST_NET",
+  "nameApp": "Blockchain Store App",
+  "pseudonymApp": "Blockchain Store",
   "environment": {
     "TESTNET": {
       "coin": "xpx",

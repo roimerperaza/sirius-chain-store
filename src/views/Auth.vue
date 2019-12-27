@@ -18,7 +18,7 @@
                     <div class="d-flex justify-center">
                       <img :src="require(`@/assets/img/login/step${item}.png`)" alt="Proximax Logo" />
                     </div>
-                    <v-card-title class="justify-center color-card-text">Blockchain Store App</v-card-title>
+                    <v-card-title class="justify-center color-card-text">{{nameApp}}</v-card-title>
                   </v-carousel-item>
                 </v-carousel>
               </v-col>
@@ -67,6 +67,7 @@
 export default {
   inject: ["theme"],
   data: () => ({
+    nameApp: "",
     showArrows: false,
     tab: null
   }),
@@ -82,6 +83,9 @@ export default {
         : this.$vuetify.theme.themes.light;
       this.$vuetify.theme.currentTheme = theme;
     }
+  },
+  beforeMount() {
+    this.nameApp = this.$store.getters.nameApp;
   }
 };
 </script>

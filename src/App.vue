@@ -1,5 +1,8 @@
 <template >
   <v-app>
+    <!-- Menu -->
+    <menu-item v-if="isLogged"></menu-item>
+
     <!-- Overlay -->
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -23,7 +26,7 @@
 
     <!-- Content -->
     <v-content>
-      <v-container style="height: 100%;">
+      <v-container>
         <router-view></router-view>
       </v-container>
     </v-content>
@@ -31,12 +34,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "App",
+  data: () => ({}),
+  components: {
+    "menu-item": () => import("@/components/Menu")
+  },
   computed: {
-    ...mapState(["overlay", "snackbar"])
+    ...mapState(["overlay", "snackbar"]),
+    ...mapGetters("authStore", ["isLogged"])
   }
 };
 </script>

@@ -18,6 +18,10 @@ export default new Vuex.Store({
       y: 'top'
     }
   },
+  getters: {
+    nameApp: state => state.configInfo.nameApp,
+    pseudonymApp: state => state.configInfo.pseudonymApp
+  },
   mutations: {
     ADD_CONFIG_INFO(state, data) {
       state.configInfo = data

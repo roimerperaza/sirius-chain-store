@@ -38,7 +38,7 @@ export default new Vuetify({
         warning: '#FFC107',
         fantasy: colors.teal
       }
-    },
+    }
   },
 });
 

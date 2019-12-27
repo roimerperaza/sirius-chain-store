@@ -7,6 +7,7 @@ export const authStore = {
         isLogged: false,
     },
     getters: {
+        userData: state => state.dataUser,
         isLogged: state => state.isLogged,
         address: state => state.dataUser.simpleWallet.address['address']
     },
