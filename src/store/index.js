@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { login } from '../modules/login-store';
+import { authStore } from './modules/auth-store';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -35,6 +35,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    login
+    authStore
   }
 })

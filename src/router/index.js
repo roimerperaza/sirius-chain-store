@@ -42,9 +42,9 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresNotAuth = to.matched.some(record => record.meta.requiresNotAuth);
-  if (requiresAuth && !store.getters['login/isLogged']) {
+  if (requiresAuth && !store.getters['authStore/isLogged']) {
     next('/auth');
-  } else if (requiresNotAuth && store.getters['login/isLogged']) {
+  } else if (requiresNotAuth && store.getters['authStore/isLogged']) {
     next('/home');
   } else {
     next();

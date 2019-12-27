@@ -22,14 +22,14 @@ export default {
   data: () => ({
   }),
   computed: {
-    ...mapState("login", ["dataUser"]),
+    ...mapState("authStore", ["dataUser"]),
     address() {
-      return this.$blockchainProvider.createFromRawAddress(this.$store.getters['login/address'])
+      return this.$blockchainProvider.createFromRawAddress(this.$store.getters['authStore/address'])
     }
   },
   methods: {
-    ...mapMutations("login", ["CHANGE_NAME_USER"]),
-    ...mapActions("login", ["LOGOUT"]),
+    ...mapMutations("authStore", ["CHANGE_NAME_USER"]),
+    ...mapActions("authStore", ["LOGOUT"]),
     changeName(){
       this.CHANGE_NAME_USER('RPERAZAAaaaa++++');
     },
