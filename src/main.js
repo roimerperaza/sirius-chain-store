@@ -11,7 +11,7 @@ import store from './store'
 import Utils from './services/utils'
 import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
-import { ProximaxProvider } from './services/proximaxProvider'
+import { BlockchainProvider } from './services/blockchain-provider'
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)
@@ -28,7 +28,7 @@ const configIntegration = async function () {
     store.commit('ADD_CONFIG_INFO', configInfo.data)
     const environment = getEnvironment(configInfo.data)
     Vue.prototype.$environment = environment
-    Vue.prototype.$proximaxProvider = new ProximaxProvider(
+    Vue.prototype.$blockchainProvider = new BlockchainProvider(
       environment.connectionNodes.nodes[0],
       environment.connectionNodes.protocol,
       environment.connectionNodes.networkType

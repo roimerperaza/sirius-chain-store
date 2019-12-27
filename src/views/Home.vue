@@ -8,28 +8,31 @@
         <b>{{address.pretty()}}</b>
         <br />
         <br />
-        <v-btn @click="goToHome(true)">LOG OUT</v-btn>
+        <v-btn @click="goToHome(true)">LOG OUT</v-btn> <br> <br>
+        <v-btn @click="changeName(true)">CAMBIAR NOMBRE DE USUARIO {{dataUser.name}}</v-btn>
       </v-container>
     </v-layout>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   data: () => ({
-    address: ""
   }),
-  created() {
-    // console.log(this.dataUser);
-    this.address =  this.$proximaxProvider.createFromRawAddress(this.dataUser.simpleWallet.address["address"])
-  },
   computed: {
-    ...mapState(["dataUser"])
+    ...mapState("login", ["dataUser"]),
+    address() {
+      return this.$blockchainProvider.createFromRawAddress(this.$store.getters['login/address'])
+    }
   },
   methods: {
-    ...mapActions(["LOGOUT"]),
+    ...mapMutations("login", ["CHANGE_NAME_USER"]),
+    ...mapActions("login", ["LOGOUT"]),
+    changeName(){
+      this.CHANGE_NAME_USER('RPERAZAAaaaa++++');
+    },
     goToHome(logout) {
       if (logout) {
         this.LOGOUT(null);

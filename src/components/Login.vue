@@ -86,7 +86,8 @@ export default {
     this.configForm = this.$utils.getConfigForm();
   },
   methods: {
-    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
+    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
+    ...mapMutations("login", ["LOGIN"]),
     emitEventForm(text, color, status = false) {
       this.sendingForm = false;
       this.SHOW_LOADING(status);

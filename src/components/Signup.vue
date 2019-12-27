@@ -192,6 +192,7 @@ export default {
             color: "success"
           });
         } else {
+          this.reset();
           this.SHOW_SNACKBAR({
             snackbar: true,
             text: `Has ocurred a error`,

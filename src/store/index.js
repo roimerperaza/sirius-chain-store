@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { login } from '../modules/login-store';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     configInfo: null,
     environment: null,
-    isLogged: false,
-    dataUser: null,
     overlay: false,
     snackbar: {
       color: '',
@@ -23,24 +22,19 @@ export default new Vuex.Store({
     ADD_CONFIG_INFO(state, data) {
       state.configInfo = data
     },
-    LOGIN(state, data) {
-      state.isLogged = (data && data.username && data.simpleWallet) ? true : false
-      state.dataUser = data
-    },
     SHOW_LOADING(state, value) {
       state.overlay = value
     },
     SHOW_SNACKBAR(state, data) {
-      state.snackbar.snackbar = data.snackbar
-      state.snackbar.text = data.text
-      state.snackbar.color = data.color
+      const { snackbar, text, color } = data
+      state.snackbar.snackbar = snackbar
+      state.snackbar.text = text
+      state.snackbar.color = color
     }
   },
   actions: {
-    LOGOUT({ commit }, data) {
-      commit('LOGIN', null)
-    }
   },
   modules: {
+    login
   }
 })

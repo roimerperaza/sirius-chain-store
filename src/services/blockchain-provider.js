@@ -15,7 +15,7 @@ import {
   Address
 } from 'tsjs-xpx-chain-sdk'
 
-class ProximaxProvider {
+class BlockchainProvider {
   constructor(node, protocol, typeNetwork) {
     this.url = this.buildURL(node, protocol)
     this.typeNetwork = NetworkType[typeNetwork];
@@ -35,7 +35,7 @@ class ProximaxProvider {
    * @param {*} node
    * @param {*} protocol
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   buildURL(node, protocol) {
     let url = null
@@ -58,7 +58,7 @@ class ProximaxProvider {
    * @param {*} password
    * @param {*} [network=this.typeNetwork]
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   createAccountSimple(walletName, password, network = this.typeNetwork) {
     return SimpleWallet.create(walletName, this.createPassword(password), network);
@@ -69,7 +69,7 @@ class ProximaxProvider {
    *
    * @param {*} value
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   createPassword(password) {
     return new Password(password);
@@ -80,7 +80,7 @@ class ProximaxProvider {
    *
    * @param {*} address
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   createFromRawAddress (address) {
     return Address.createFromRawAddress(address)
@@ -93,7 +93,7 @@ class ProximaxProvider {
    * @param {*} network
    * @param {*} address
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   checkAddress(privateKey, network, address) {
     return (Account.createFromPrivateKey(privateKey, network).address.plain() === address) ? true : false;
@@ -106,7 +106,7 @@ class ProximaxProvider {
    * @param {*} account
    * @param {*} [network=this.typeNetwork]
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   decrypt(common, account, network = this.typeNetwork) {
     try {
@@ -137,7 +137,7 @@ class ProximaxProvider {
    *
    * @param {*} privateKey
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   isValidPrivateKey(privateKey) {
     if (privateKey.length !== 64 && privateKey.length !== 66) {
@@ -156,11 +156,11 @@ class ProximaxProvider {
    *
    * @param {*} str
    * @returns
-   * @memberof ProximaxProvider
+   * @memberof BlockchainProvider
    */
   isHexadecimal(str) {
     return str.match('^(0x|0X)?[a-fA-F0-9]+$') !== null;
   }
 }
 
-export { ProximaxProvider }
+export { BlockchainProvider }
