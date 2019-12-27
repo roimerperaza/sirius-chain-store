@@ -2,7 +2,7 @@
   <div style="display: flex; align-items: center; height: 100%;">
     <v-layout>
       <v-container>
-        <v-card class="mx-auto" >
+        <v-card class="mx-auto">
           <v-container class="p-0">
             <v-row class="mx-auto">
               <!-- Carousel -->
@@ -64,8 +64,6 @@
 </template>
 
 <script>
-import SignUp from "@/components/Signup";
-import Login from "@/components/Login";
 export default {
   inject: ["theme"],
   data: () => ({
@@ -73,8 +71,8 @@ export default {
     tab: null
   }),
   components: {
-    "sign-up": SignUp,
-    login: Login
+    login: () => import("@/components/Login"),
+    "sign-up": () => import("@/components/Signup")
   },
   methods: {
     changeTheme() {
