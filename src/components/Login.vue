@@ -76,11 +76,11 @@ import accountMixin from "../mixins/account";
 export default {
   mixins: [generalMixins, accountMixin],
   data: () => ({
+    username: "rperaza",
+    password: "1qazxsw2",
     configForm: null,
     isValidForm: false,
-    password: "",
-    sendingForm: false,
-    username: ""
+    sendingForm: false
   }),
   created() {
     this.configForm = this.$utils.getConfigForm();
