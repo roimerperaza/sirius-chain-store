@@ -16,7 +16,7 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-item v-for="link in links" :key="link.title" router :to="link.route">
+        <v-list-item v-for="link in links" :key="link.title" router :to="link.route" @click.stop="drawer = !drawer">
           <v-list-item-icon>
             <v-icon>{{ link.icon }}</v-icon>
           </v-list-item-icon>
@@ -58,14 +58,12 @@ export default {
   data: () => ({
     drawer: false,
     links: [
-      //   { title: "Auth", icon: "mdi-account", route: "/auth" },
-      { title: "Home", icon: "mdi-view-dashboard", route: "/home" }
-      //   { title: "Account", icon: "mdi-account", route: "/account" },
-      //   { title: "Admin", icon: "mdi-gavel", route: "/admin" }
+      { title: "Home", icon: "mdi-view-dashboard", route: "/home" },
+      { title: "Profile", icon: "mdi-account", route: "/profile/account" }
     ]
   }),
   methods: {
-    ...mapActions("authStore", ["LOGOUT"]),
+    ...mapActions("accountStore", ["LOGOUT"]),
     goToHome() {
       this.LOGOUT(null);
       this.$router.push("/auth").catch(e => {});
@@ -73,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters(["pseudonymApp"]),
-    ...mapGetters("authStore", ["isLogged", "userData"]),
+    ...mapGetters("accountStore", ["isLogged", "userData"]),
     getVersion() {
       return `v${this.$environment.version}`;
     }

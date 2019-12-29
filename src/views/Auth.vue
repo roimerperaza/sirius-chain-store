@@ -45,14 +45,14 @@
                   </v-tab-item>
 
                   <v-tab-item value="tab-register">
-                    <v-card flat color="transparent">
-                      <sign-up></sign-up>
-                    </v-card>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="9" class="mx-auto">
+                          <sign-up :fromAuth="true"></sign-up>
+                        </v-col>
+                      </v-row>
+                    </v-container>
                   </v-tab-item>
-
-                  <!-- <div class="d-flex justify-center">
-                    <span class="pointer" @click="changeTheme">Change Theme</span>
-                  </div>-->
                 </v-tabs-items>
               </v-col>
             </v-row>
@@ -73,7 +73,7 @@ export default {
   }),
   components: {
     login: () => import("@/components/Login"),
-    "sign-up": () => import("@/components/Signup")
+    'sign-up': () => import("@/components/Signup")
   },
   methods: {
     changeTheme() {

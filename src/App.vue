@@ -26,9 +26,9 @@
 
     <!-- Content -->
     <v-content>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
+      <transition name="fade" mode="out-in">
+        <router-view :key="$route.path"></router-view>
+      </transition>
     </v-content>
   </v-app>
 </template>
@@ -44,7 +44,22 @@ export default {
   },
   computed: {
     ...mapState(["overlay", "snackbar"]),
-    ...mapGetters("authStore", ["isLogged"])
+    ...mapGetters("accountStore", ["isLogged"])
   }
 };
 </script>
+
+<style scoped>
+/*
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.1s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}*/
+</style>

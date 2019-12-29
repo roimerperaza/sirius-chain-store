@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
-    ...mapMutations("authStore", ["LOGIN"]),
+    ...mapMutations("accountStore", ["LOGIN"]),
     emitEventForm(text, color, status = false) {
       this.sendingForm = false;
       this.SHOW_LOADING(status);

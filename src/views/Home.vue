@@ -17,7 +17,7 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({}),
   computed: {
-    ...mapGetters("authStore", ["userData", "address"]),
+    ...mapGetters("accountStore", ["userData", "address"]),
     getAddress() {
       return this.$blockchainProvider.createFromRawAddress(
         this.address
