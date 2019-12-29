@@ -8,7 +8,6 @@ import VueLodash from 'vue-lodash'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Utils from './services/utils'
 import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
 import { BlockchainProvider } from './services/blockchain-provider'
@@ -19,7 +18,6 @@ Vue.use(VueAxios, axios);
 Vue.config.productionTip = false
 
 // Define prototype
-Vue.prototype.$utils = Utils
 Vue.prototype.$storage = new StorageService(localStorage)
 
 const configIntegration = async function () {

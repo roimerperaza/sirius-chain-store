@@ -2,7 +2,7 @@
   <div>
     <!-- Navigation Drawer -->
     <!-- <v-navigation-drawer v-model="drawer" absolute temporary app mini-variant> -->
-    <v-navigation-drawer v-model="drawer" app mobile-break-point="800">
+    <v-navigation-drawer v-model="drawer" app mobile-break-point="1024">
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>

@@ -40,9 +40,9 @@ export default {
         saveUser(data) {
             try {
                 const users = this.getUsers()
-                const { username, name, lastname, email, password } = data
+                const { username, name, lastname, email, password, country, dateBirth } = data
                 if (!this.getByUsername(username)) {
-                    const toSave = { username, name, lastname, email, algo: 'pass:bip32' }
+                    const toSave = { username, name, lastname, email, algo: 'pass:bip32', country, dateBirth }
                     toSave['simpleWallet'] = this.$blockchainProvider.createAccountSimple(username, password)
                     users.push(toSave)
                     this.$storage.set(`users`, users)

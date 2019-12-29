@@ -19,7 +19,7 @@
           </v-col>
 
           <!-- Lastname -->
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="6" v-if="!fromAuth">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.lastname"
@@ -37,6 +37,7 @@
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.username"
+              :readonly="!fromAuth"
               :loading="searchingUser"
               :disabled="searchingUser"
               :minlength="configForm.username.min"
@@ -55,7 +56,7 @@
           </v-col>
 
           <!-- Email -->
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="6" v-if="!fromAuth">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.email"
@@ -66,6 +67,8 @@
               @keyup="formValue.email = removeSpaces(formValue.email)"
             ></v-text-field>
           </v-col>
+
+          <!-- <pais v-model="formulario.pais"></pais> -->
 
           <!-- Password -->
           <v-col cols="12" md="6">
@@ -112,7 +115,10 @@
               @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
             ></v-text-field>
           </v-col>
+        </v-row>
 
+        <!-- Buttons -->
+        <v-row>
           <!-- Button Cancel -->
           <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-end">
             <v-btn :disabled="sendingForm" @click="reset" outlined color="fantasy">CANCEL</v-btn>
@@ -155,14 +161,16 @@ export default {
       username: "",
       password: "",
       confirmPassword: "",
-      email: ""
+      email: "",
+      country: "",
+      dateBirth: ""
     }
   }),
   beforeMount() {
     this.showForm = this.fromAuth;
   },
   created() {
-    this.configForm = this.$utils.getConfigForm();
+    this.configForm = this.getConfigForm();
     this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500);
   },
   computed: {

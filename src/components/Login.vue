@@ -83,7 +83,7 @@ export default {
     sendingForm: false
   }),
   created() {
-    this.configForm = this.$utils.getConfigForm();
+    this.configForm = this.getConfigForm();
   },
   methods: {
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
@@ -108,7 +108,7 @@ export default {
             this.emitEventForm(`Hi ${userData.name}, welcome!`, "success");
             this.$router.push("/home").catch(e => {});
           } else {
-            this.emitEventForm("Invalid username or password", "errorIntense");
+            this.emitEventForm("Combination of username and / or password is invalid.", "errorIntense");
           }
         }, 500);
       }

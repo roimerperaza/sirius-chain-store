@@ -3,11 +3,11 @@
     <v-layout>
       <v-container>
         <v-row>
-          <v-col cols="11" md="10" class="mx-auto">
+          <v-col md="11" lg="10" class="mx-auto">
             <span class>Basic Info</span>
             <v-card class="pa-2 mt-2">
               <v-row>
-                <v-col cols="4">
+                <v-col cols="4" md="3">
                   <v-list dense>
                     <v-list-item-group color="primary">
                       <v-list-item v-for="option in options" :key="option.id" router :to="option.route">
@@ -22,7 +22,7 @@
                   </v-list>
                 </v-col>
 
-                <v-col cols="8">
+                <v-col cols="8" md="9">
                   <router-view></router-view>
                 </v-col>
               </v-row>
