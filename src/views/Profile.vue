@@ -4,7 +4,7 @@
       <v-container>
         <v-row>
           <v-col md="11" lg="10" class="mx-auto">
-            <span class>Basic Info</span>
+            <span class>Profile</span>
             <v-card class="pa-2 mt-2">
               <v-row>
                 <v-col cols="4" md="3">

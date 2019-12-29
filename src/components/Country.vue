@@ -1,996 +1,268 @@
 <template>
-  <select class="form-control" v-model="countrySelected">
-    <template v-for="(country, key) of countries">
-      <option :disabled="country.value === ''" :value="country.value" :key="key">{{country.name}}</option>
-    </template>
-  </select>
+  <div>
+    <v-autocomplete
+      v-model="countrySelected"
+      :items="countries"
+      item-text="state"
+      item-value="code"
+      label="Select country"
+      :hint="`${countrySelected.state}, ${countrySelected.code}`"
+      return-object
+    ></v-autocomplete>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      countrySelected: { state: "", code: "" },
       countries: [
-        {
-          name: "Select country",
-          value: ""
-        },
-        {
-          name: "Afganistán",
-          value: "Afganistán"
-        },
-        {
-          name: "Albania",
-          value: "Albania"
-        },
-        {
-          name: "Alemania",
-          value: "Alemania"
-        },
-        {
-          name: "Andorra",
-          value: "Andorra"
-        },
-        {
-          name: "Angola",
-          value: "Angola"
-        },
-        {
-          name: "Anguila",
-          value: "Anguila"
-        },
-        {
-          name: "Anguila",
-          value: "Anguila"
-        },
-        {
-          name: "Antártida",
-          value: "Antártida"
-        },
-        {
-          name: "Antigua y Barbuda",
-          value: "Antigua y Barbuda"
-        },
-        {
-          name: "Antillas holandesas",
-          value: "Antillas holandesas"
-        },
-        {
-          name: "Arabia Saudí",
-          value: "Arabia Saudí"
-        },
-        {
-          name: "Argelia",
-          value: "Argelia"
-        },
-        {
-          name: "Argentina",
-          value: "Argentina"
-        },
-        {
-          name: "Argentina",
-          value: "Argentina"
-        },
-        {
-          name: "Armenia",
-          value: "Armenia"
-        },
-        {
-          name: "Aruba",
-          value: "Aruba"
-        },
-        {
-          name: "Australia",
-          value: "Australia"
-        },
-        {
-          name: "Austria",
-          value: "Austria"
-        },
-        {
-          name: "Azerbaiyán",
-          value: "Azerbaiyán"
-        },
-        {
-          name: "Bahamas",
-          value: "Bahamas"
-        },
-        {
-          name: "Bahrein",
-          value: "Bahrein"
-        },
-        {
-          name: "Bangladesh",
-          value: "Bangladesh"
-        },
-        {
-          name: "Barbados",
-          value: "Barbados"
-        },
-        {
-          name: "Bélgica",
-          value: "Bélgica"
-        },
-        {
-          name: "Belice",
-          value: "Belice"
-        },
-        {
-          name: "Benín",
-          value: "Benín"
-        },
-        {
-          name: "Bermudas",
-          value: "Bermudas"
-        },
-        {
-          name: "Bhután",
-          value: "Bhután"
-        },
-        {
-          name: "Bielorrusia",
-          value: "Bielorrusia"
-        },
-        {
-          name: "Birmania",
-          value: "Birmania"
-        },
-        {
-          name: "Bolivia",
-          value: "Bolivia"
-        },
-        {
-          name: "Bosnia y Herzegovina",
-          value: "Bosnia y Herzegovina"
-        },
-        {
-          name: "Botsuana",
-          value: "Botsuana"
-        },
-        {
-          name: "Brasil",
-          value: "Brasil"
-        },
-        {
-          name: "Brunei",
-          value: "Brunei"
-        },
-        {
-          name: "Bulgaria",
-          value: "Bulgaria"
-        },
-        {
-          name: "Burkina Faso",
-          value: "Burkina Faso"
-        },
-        {
-          name: "Burundi",
-          value: "Burundi"
-        },
-        {
-          name: "Cabo Verde",
-          value: "Cabo Verde"
-        },
-        {
-          name: "Cabo Verde",
-          value: "Cabo Verde"
-        },
-        {
-          name: "Camboya",
-          value: "Camboya"
-        },
-        {
-          name: "Camerún",
-          value: "Camerún"
-        },
-        {
-          name: "Canadá",
-          value: "Canadá"
-        },
-        {
-          name: "Chad",
-          value: "Chad"
-        },
-        {
-          name: "Chile",
-          value: "Chile"
-        },
-        {
-          name: "China",
-          value: "China"
-        },
-        {
-          name: "Chipre",
-          value: "Chipre"
-        },
-        {
-          name: "Ciudad estado del Vaticano",
-          value: "Ciudad estado del Vaticano"
-        },
-        {
-          name: "Colombia",
-          value: "Colombia"
-        },
-        {
-          name: "Comores",
-          value: "Comores"
-        },
-        {
-          name: "Congo",
-          value: "Congo"
-        },
-        {
-          name: "Corea",
-          value: "Corea"
-        },
-        {
-          name: "Corea del Norte",
-          value: "Corea del Norte"
-        },
-        {
-          name: "Costa del Marfíl",
-          value: "Costa del Marfíl"
-        },
-        {
-          name: "Costa Rica",
-          value: "Costa Rica"
-        },
-        {
-          name: "Croacia",
-          value: "Croacia"
-        },
-        {
-          name: "Cuba",
-          value: "Cuba"
-        },
-        {
-          name: "Dinamarca",
-          value: "Dinamarca"
-        },
-        {
-          name: "Djibouri",
-          value: "Djibouri"
-        },
-        {
-          name: "Dominica",
-          value: "Dominica"
-        },
-        {
-          name: "Ecuador",
-          value: "Ecuador"
-        },
-        {
-          name: "Egipto",
-          value: "Egipto"
-        },
-        {
-          name: "El Salvador",
-          value: "El Salvador"
-        },
-        {
-          name: "Emiratos Arabes Unidos",
-          value: "Emiratos Arabes Unidos"
-        },
-        {
-          name: "Eritrea",
-          value: "Eritrea"
-        },
-        {
-          name: "Eslovaquia",
-          value: "Eslovaquia"
-        },
-        {
-          name: "Eslovenia",
-          value: "Eslovenia"
-        },
-        {
-          name: "España",
-          value: "España"
-        },
-        {
-          name: "Estados Unidos",
-          value: "Estados Unidos"
-        },
-        {
-          name: "Estonia",
-          value: "Estonia"
-        },
-        {
-          name: "Etiopía",
-          value: "Etiopía"
-        },
-        {
-          name: "Ex-República Yugoslava de Macedonia",
-          value: "Ex-República Yugoslava de Macedonia"
-        },
-        {
-          name: "Filipinas",
-          value: "Filipinas"
-        },
-        {
-          name: "Finlandia",
-          value: "Finlandia"
-        },
-        {
-          name: "Francia",
-          value: "Francia"
-        },
-        {
-          name: "Gabón",
-          value: "Gabón"
-        },
-        {
-          name: "Gambia",
-          value: "Gambia"
-        },
-        {
-          name: "Georgia del Sur y las islas Sandwich del Sur",
-          value: "Georgia del Sur y las islas Sandwich del Sur"
-        },
-        {
-          name: "Ghana",
-          value: "Ghana"
-        },
-        {
-          name: "Gibraltar",
-          value: "Gibraltar"
-        },
-        {
-          name: "Granada",
-          value: "Granada"
-        },
-        {
-          name: "Grecia",
-          value: "Grecia"
-        },
-        {
-          name: "Groenlandia",
-          value: "Groenlandia"
-        },
-        {
-          name: "Guadalupe",
-          value: "Guadalupe"
-        },
-        {
-          name: "Guam",
-          value: "Guam"
-        },
-        {
-          name: "Guatemala",
-          value: "Guatemala"
-        },
-        {
-          name: "Guayana",
-          value: "Guayana"
-        },
-        {
-          name: "Guayana francesa",
-          value: "Guayana francesa"
-        },
-        {
-          name: "Guinea",
-          value: "Guinea"
-        },
-        {
-          name: "Guinea Ecuatorial",
-          value: "Guinea Ecuatorial"
-        },
-        {
-          name: "Guinea-Bissau",
-          value: "Guinea-Bissau"
-        },
-        {
-          name: "Haití",
-          value: "Haití"
-        },
-        {
-          name: "Holanda",
-          value: "Holanda"
-        },
-        {
-          name: "Honduras",
-          value: "Honduras"
-        },
-        {
-          name: "Hong Kong R. A. E",
-          value: "Hong Kong R. A. E"
-        },
-        {
-          name: "Hungría",
-          value: "Hungría"
-        },
-        {
-          name: "India",
-          value: "India"
-        },
-        {
-          name: "Indonesia",
-          value: "Indonesia"
-        },
-        {
-          name: "Irak",
-          value: "Irak"
-        },
-        {
-          name: "Irán",
-          value: "Irán"
-        },
-        {
-          name: "Irlanda",
-          value: "Irlanda"
-        },
-        {
-          name: "Isla Bouvet",
-          value: "Isla Bouvet"
-        },
-        {
-          name: "Isla Christmas",
-          value: "Isla Christmas"
-        },
-        {
-          name: "Isla Heard e Islas McDonald",
-          value: "Isla Heard e Islas McDonald"
-        },
-        {
-          name: "Islandia",
-          value: "Islandia"
-        },
-        {
-          name: "Islas Caimán",
-          value: "Islas Caimán"
-        },
-        {
-          name: "Islas Cook",
-          value: "Islas Cook"
-        },
-        {
-          name: "Islas de Cocos o Keeling",
-          value: "Islas de Cocos o Keeling"
-        },
-        {
-          name: "Islas Faroe",
-          value: "Islas Faroe"
-        },
-        {
-          name: "Islas Fiyi",
-          value: "Islas Fiyi"
-        },
-        {
-          name: "Islas Malvinas Islas Falkland",
-          value: "Islas Malvinas Islas Falkland"
-        },
-        {
-          name: "Islas Marianas del norte",
-          value: "Islas Marianas del norte"
-        },
-        {
-          name: "Islas Marshall",
-          value: "Islas Marshall"
-        },
-        {
-          name: "Islas menores de Estados Unidos",
-          value: "Islas menores de Estados Unidos"
-        },
-        {
-          name: "Islas Palau",
-          value: "Islas Palau"
-        },
-        {
-          name: "Islas Salomón",
-          value: "Islas Salomón"
-        },
-        {
-          name: "Islas Tokelau",
-          value: "Islas Tokelau"
-        },
-        {
-          name: "Islas Turks y Caicos",
-          value: "Islas Turks y Caicos"
-        },
-        {
-          name: "Islas Vírgenes EE.UU.",
-          value: "Islas Vírgenes EE.UU."
-        },
-        {
-          name: "Islas Vírgenes Reino Unido",
-          value: "Islas Vírgenes Reino Unido"
-        },
-        {
-          name: "Israel",
-          value: "Israel"
-        },
-        {
-          name: "Italia",
-          value: "Italia"
-        },
-        {
-          name: "Jamaica",
-          value: "Jamaica"
-        },
-        {
-          name: "Japón",
-          value: "Japón"
-        },
-        {
-          name: "Jordania",
-          value: "Jordania"
-        },
-        {
-          name: "Kazajistán",
-          value: "Kazajistán"
-        },
-        {
-          name: "Kenia",
-          value: "Kenia"
-        },
-        {
-          name: "Kirguizistán",
-          value: "Kirguizistán"
-        },
-        {
-          name: "Kiribati",
-          value: "Kiribati"
-        },
-        {
-          name: "Kuwait",
-          value: "Kuwait"
-        },
-        {
-          name: "Laos",
-          value: "Laos"
-        },
-        {
-          name: "Lesoto",
-          value: "Lesoto"
-        },
-        {
-          name: "Letonia",
-          value: "Letonia"
-        },
-        {
-          name: "Líbano",
-          value: "Líbano"
-        },
-        {
-          name: "Liberia",
-          value: "Liberia"
-        },
-        {
-          name: "Libia",
-          value: "Libia"
-        },
-        {
-          name: "Liechtenstein",
-          value: "Liechtenstein"
-        },
-        {
-          name: "Lituania",
-          value: "Lituania"
-        },
-        {
-          name: "Luxemburgo",
-          value: "Luxemburgo"
-        },
-        {
-          name: "Macao R. A. E",
-          value: "Macao R. A. E"
-        },
-        {
-          name: "Madagascar",
-          value: "Madagascar"
-        },
-        {
-          name: "Malasia",
-          value: "Malasia"
-        },
-        {
-          name: "Malawi",
-          value: "Malawi"
-        },
-        {
-          name: "Maldivas",
-          value: "Maldivas"
-        },
-        {
-          name: "Malí",
-          value: "Malí"
-        },
-        {
-          name: "Malta",
-          value: "Malta"
-        },
-        {
-          name: "Marruecos",
-          value: "Marruecos"
-        },
-        {
-          name: "Martinica",
-          value: "Martinica"
-        },
-        {
-          name: "Mauricio",
-          value: "Mauricio"
-        },
-        {
-          name: "Mauritania",
-          value: "Mauritania"
-        },
-        {
-          name: "Mayotte",
-          value: "Mayotte"
-        },
-        {
-          name: "México",
-          value: "México"
-        },
-        {
-          name: "Micronesia",
-          value: "Micronesia"
-        },
-        {
-          name: "Moldavia",
-          value: "Moldavia"
-        },
-        {
-          name: "Mónaco",
-          value: "Mónaco"
-        },
-        {
-          name: "Mongolia",
-          value: "Mongolia"
-        },
-        {
-          name: "Montserrat",
-          value: "Montserrat"
-        },
-        {
-          name: "Mozambique",
-          value: "Mozambique"
-        },
-        {
-          name: "Namibia",
-          value: "Namibia"
-        },
-        {
-          name: "Nauru",
-          value: "Nauru"
-        },
-        {
-          name: "Nepal",
-          value: "Nepal"
-        },
-        {
-          name: "Nicaragua",
-          value: "Nicaragua"
-        },
-        {
-          name: "Níger",
-          value: "Níger"
-        },
-        {
-          name: "Nigeria",
-          value: "Nigeria"
-        },
-        {
-          name: "Niue",
-          value: "Niue"
-        },
-        {
-          name: "Norfolk",
-          value: "Norfolk"
-        },
-        {
-          name: "Noruega",
-          value: "Noruega"
-        },
-        {
-          name: "Nueva Caledonia",
-          value: "Nueva Caledonia"
-        },
-        {
-          name: "Nueva Zelanda",
-          value: "Nueva Zelanda"
-        },
-        {
-          name: "Omán",
-          value: "Omán"
-        },
-        {
-          name: "Panamá",
-          value: "Panamá"
-        },
-        {
-          name: "Papua Nueva Guinea",
-          value: "Papua Nueva Guinea"
-        },
-        {
-          name: "Paquistán",
-          value: "Paquistán"
-        },
-        {
-          name: "Paraguay",
-          value: "Paraguay"
-        },
-        {
-          name: "Perú",
-          value: "Perú"
-        },
-        {
-          name: "Pitcairn",
-          value: "Pitcairn"
-        },
-        {
-          name: "Polinesia francesa",
-          value: "Polinesia francesa"
-        },
-        {
-          name: "Polonia",
-          value: "Polonia"
-        },
-        {
-          name: "Portugal",
-          value: "Portugal"
-        },
-        {
-          name: "Puerto Rico",
-          value: "Puerto Rico"
-        },
-        {
-          name: "Polonia",
-          value: "Polonia"
-        },
-        {
-          name: "Portugal",
-          value: "Portugal"
-        },
-        {
-          name: "Puerto Rico",
-          value: "Puerto Rico"
-        },
-        {
-          name: "Qatar",
-          value: "Qatar"
-        },
-        {
-          name: "Reino Unido",
-          value: "Reino Unido"
-        },
-        {
-          name: "República Centroafricana",
-          value: "República Centroafricana"
-        },
-        {
-          name: "República Checa",
-          value: "República Checa"
-        },
-        {
-          name: "República de Sudáfrica",
-          value: "República de Sudáfrica"
-        },
-        {
-          name: "República Democrática del Congo Zaire",
-          value: "República Democrática del Congo Zaire"
-        },
-        {
-          name: "República Dominicana",
-          value: "República Dominicana"
-        },
-        {
-          name: "Reunión",
-          value: "Reunión"
-        },
-        {
-          name: "Ruanda",
-          value: "Ruanda"
-        },
-        {
-          name: "Rumania",
-          value: "Rumania"
-        },
-        {
-          name: "Rusia",
-          value: "Rusia"
-        },
-        {
-          name: "Samoa",
-          value: "Samoa"
-        },
-        {
-          name: "Samoa occidental",
-          value: "Samoa occidental"
-        },
-        {
-          name: "San Kitts y Nevis",
-          value: "San Kitts y Nevis"
-        },
-        {
-          name: "San Pierre y Miquelon",
-          value: "San Pierre y Miquelon"
-        },
-        {
-          name: "San Vicente e Islas Granadinas",
-          value: "San Vicente e Islas Granadinas"
-        },
-        {
-          name: "Santa Helena",
-          value: "Santa Helena"
-        },
-        {
-          name: "Santa Lucía",
-          value: "Santa Lucía"
-        },
-        {
-          name: "Santo Tomé y Príncipe",
-          value: "Santo Tomé y Príncipe"
-        },
-        {
-          name: "Senegal",
-          value: "Senegal"
-        },
-        {
-          name: "Serbia y Montenegro",
-          value: "Serbia y Montenegro"
-        },
-        {
-          name: "Sychelles",
-          value: "Sychelles"
-        },
-        {
-          name: "Sierra Leona",
-          value: "Sierra Leona"
-        },
-        {
-          name: "Singapur",
-          value: "Singapur"
-        },
-        {
-          name: "Siria",
-          value: "Siria"
-        },
-        {
-          name: "Somalia",
-          value: "Somalia"
-        },
-        {
-          name: "Sri Lanka",
-          value: "Sri Lanka"
-        },
-        {
-          name: "Suazilandia",
-          value: "Suazilandia"
-        },
-        {
-          name: "Sudán",
-          value: "Sudán"
-        },
-        {
-          name: "Suecia",
-          value: "Suecia"
-        },
-        {
-          name: "Suiza",
-          value: "Suiza"
-        },
-        {
-          name: "Surinam",
-          value: "Surinam"
-        },
-        {
-          name: "Svalbard",
-          value: "Svalbard"
-        },
-        {
-          name: "Tailandia",
-          value: "Tailandia"
-        },
-        {
-          name: "Taiwán",
-          value: "Taiwán"
-        },
-        {
-          name: "Tanzania",
-          value: "Tanzania"
-        },
-        {
-          name: "Tayikistán",
-          value: "Tayikistán"
-        },
-        {
-          name: "Territorios británicos del océano Indico",
-          value: "Territorios británicos del océano Indico"
-        },
-        {
-          name: "Territorios franceses del sur",
-          value: "Territorios franceses del sur"
-        },
-        {
-          name: "Timor Oriental",
-          value: "Timor Oriental"
-        },
-        {
-          name: "Togo",
-          value: "Togo"
-        },
-        {
-          name: "Tonga",
-          value: "Tonga"
-        },
-        {
-          name: "Trinidad y Tobago",
-          value: "Trinidad y Tobago"
-        },
-        {
-          name: "Túnez",
-          value: "Túnez"
-        },
-        {
-          name: "Turkmenistán",
-          value: "Turkmenistán"
-        },
-        {
-          name: "Turquía",
-          value: "Turquía"
-        },
-        {
-          name: "Tuvalu",
-          value: "Tuvalu"
-        },
-        {
-          name: "Ucrania",
-          value: "Ucrania"
-        },
-        {
-          name: "Uganda",
-          value: "Uganda"
-        },
-        {
-          name: "Uruguay",
-          value: "Uruguay"
-        },
-        {
-          name: "Uzbekistán",
-          value: "Uzbekistán"
-        },
-        {
-          name: "Vanuatu",
-          value: "Vanuatu"
-        },
-        {
-          name: "Venezuela",
-          value: "Venezuela"
-        },
-        {
-          name: "Vietnam",
-          value: "Vietnam"
-        },
-        {
-          name: "Wallis y Futuna",
-          value: "Wallis y Futuna"
-        },
-        {
-          name: "Yemen",
-          value: "Yemen"
-        },
-        {
-          name: "Zambia",
-          value: "Zambia"
-        },
-        {
-          name: "Zimbabue",
-          value: "Zimbabue"
-        }
+        { state: "Afghanistan", code: "AF" },
+        { state: "Åland Islands", code: "AX" },
+        { state: "Albania", code: "AL" },
+        { state: "Algeria", code: "DZ" },
+        { state: "American Samoa", code: "AS" },
+        { state: "AndorrA", code: "AD" },
+        { state: "Angola", code: "AO" },
+        { state: "Anguilla", code: "AI" },
+        { state: "Antarctica", code: "AQ" },
+        { state: "Antigua and Barbuda", code: "AG" },
+        { state: "Argentina", code: "AR" },
+        { state: "Armenia", code: "AM" },
+        { state: "Aruba", code: "AW" },
+        { state: "Australia", code: "AU" },
+        { state: "Austria", code: "AT" },
+        { state: "Azerbaijan", code: "AZ" },
+        { state: "Bahamas", code: "BS" },
+        { state: "Bahrain", code: "BH" },
+        { state: "Bangladesh", code: "BD" },
+        { state: "Barbados", code: "BB" },
+        { state: "Belarus", code: "BY" },
+        { state: "Belgium", code: "BE" },
+        { state: "Belize", code: "BZ" },
+        { state: "Benin", code: "BJ" },
+        { state: "Bermuda", code: "BM" },
+        { state: "Bhutan", code: "BT" },
+        { state: "Bolivia", code: "BO" },
+        { state: "Bosnia and Herzegovina", code: "BA" },
+        { state: "Botswana", code: "BW" },
+        { state: "Bouvet Island", code: "BV" },
+        { state: "Brazil", code: "BR" },
+        { state: "British Indian Ocean Territory", code: "IO" },
+        { state: "Brunei Darussalam", code: "BN" },
+        { state: "Bulgaria", code: "BG" },
+        { state: "Burkina Faso", code: "BF" },
+        { state: "Burundi", code: "BI" },
+        { state: "Cambodia", code: "KH" },
+        { state: "Cameroon", code: "CM" },
+        { state: "Canada", code: "CA" },
+        { state: "Cape Verde", code: "CV" },
+        { state: "Cayman Islands", code: "KY" },
+        { state: "Central African Republic", code: "CF" },
+        { state: "Chad", code: "TD" },
+        { state: "Chile", code: "CL" },
+        { state: "China", code: "CN" },
+        { state: "Christmas Island", code: "CX" },
+        { state: "Cocos (Keeling) Islands", code: "CC" },
+        { state: "Colombia", code: "CO" },
+        { state: "Comoros", code: "KM" },
+        { state: "Congo", code: "CG" },
+        { state: "Congo, The Democratic Republic of the", code: "CD" },
+        { state: "Cook Islands", code: "CK" },
+        { state: "Costa Rica", code: "CR" },
+        { state: "Cote D'Ivoire", code: "CI" },
+        { state: "Croatia", code: "HR" },
+        { state: "Cuba", code: "CU" },
+        { state: "Cyprus", code: "CY" },
+        { state: "Czech Republic", code: "CZ" },
+        { state: "Denmark", code: "DK" },
+        { state: "Djibouti", code: "DJ" },
+        { state: "Dominica", code: "DM" },
+        { state: "Dominican Republic", code: "DO" },
+        { state: "Ecuador", code: "EC" },
+        { state: "Egypt", code: "EG" },
+        { state: "El Salvador", code: "SV" },
+        { state: "Equatorial Guinea", code: "GQ" },
+        { state: "Eritrea", code: "ER" },
+        { state: "Estonia", code: "EE" },
+        { state: "Ethiopia", code: "ET" },
+        { state: "Falkland Islands (Malvinas)", code: "FK" },
+        { state: "Faroe Islands", code: "FO" },
+        { state: "Fiji", code: "FJ" },
+        { state: "Finland", code: "FI" },
+        { state: "France", code: "FR" },
+        { state: "French Guiana", code: "GF" },
+        { state: "French Polynesia", code: "PF" },
+        { state: "French Southern Territories", code: "TF" },
+        { state: "Gabon", code: "GA" },
+        { state: "Gambia", code: "GM" },
+        { state: "Georgia", code: "GE" },
+        { state: "Germany", code: "DE" },
+        { state: "Ghana", code: "GH" },
+        { state: "Gibraltar", code: "GI" },
+        { state: "Greece", code: "GR" },
+        { state: "Greenland", code: "GL" },
+        { state: "Grenada", code: "GD" },
+        { state: "Guadeloupe", code: "GP" },
+        { state: "Guam", code: "GU" },
+        { state: "Guatemala", code: "GT" },
+        { state: "Guernsey", code: "GG" },
+        { state: "Guinea", code: "GN" },
+        { state: "Guinea-Bissau", code: "GW" },
+        { state: "Guyana", code: "GY" },
+        { state: "Haiti", code: "HT" },
+        { state: "Heard Island and Mcdonald Islands", code: "HM" },
+        { state: "Holy See (Vatican City State)", code: "VA" },
+        { state: "Honduras", code: "HN" },
+        { state: "Hong Kong", code: "HK" },
+        { state: "Hungary", code: "HU" },
+        { state: "Iceland", code: "IS" },
+        { state: "India", code: "IN" },
+        { state: "Indonesia", code: "ID" },
+        { state: "Iran, Islamic Republic Of", code: "IR" },
+        { state: "Iraq", code: "IQ" },
+        { state: "Ireland", code: "IE" },
+        { state: "Isle of Man", code: "IM" },
+        { state: "Israel", code: "IL" },
+        { state: "Italy", code: "IT" },
+        { state: "Jamaica", code: "JM" },
+        { state: "Japan", code: "JP" },
+        { state: "Jersey", code: "JE" },
+        { state: "Jordan", code: "JO" },
+        { state: "Kazakhstan", code: "KZ" },
+        { state: "Kenya", code: "KE" },
+        { state: "Kiribati", code: "KI" },
+        { state: "Korea, Democratic People'S Republic of", code: "KP" },
+        { state: "Korea, Republic of", code: "KR" },
+        { state: "Kuwait", code: "KW" },
+        { state: "Kyrgyzstan", code: "KG" },
+        { state: "Lao People'S Democratic Republic", code: "LA" },
+        { state: "Latvia", code: "LV" },
+        { state: "Lebanon", code: "LB" },
+        { state: "Lesotho", code: "LS" },
+        { state: "Liberia", code: "LR" },
+        { state: "Libyan Arab Jamahiriya", code: "LY" },
+        { state: "Liechtenstein", code: "LI" },
+        { state: "Lithuania", code: "LT" },
+        { state: "Luxembourg", code: "LU" },
+        { state: "Macao", code: "MO" },
+        { state: "Macedonia, The Former Yugoslav Republic of", code: "MK" },
+        { state: "Madagascar", code: "MG" },
+        { state: "Malawi", code: "MW" },
+        { state: "Malaysia", code: "MY" },
+        { state: "Maldives", code: "MV" },
+        { state: "Mali", code: "ML" },
+        { state: "Malta", code: "MT" },
+        { state: "Marshall Islands", code: "MH" },
+        { state: "Martinique", code: "MQ" },
+        { state: "Mauritania", code: "MR" },
+        { state: "Mauritius", code: "MU" },
+        { state: "Mayotte", code: "YT" },
+        { state: "Mexico", code: "MX" },
+        { state: "Micronesia, Federated States of", code: "FM" },
+        { state: "Moldova, Republic of", code: "MD" },
+        { state: "Monaco", code: "MC" },
+        { state: "Mongolia", code: "MN" },
+        { state: "Montserrat", code: "MS" },
+        { state: "Morocco", code: "MA" },
+        { state: "Mozambique", code: "MZ" },
+        { state: "Myanmar", code: "MM" },
+        { state: "Namibia", code: "NA" },
+        { state: "Nauru", code: "NR" },
+        { state: "Nepal", code: "NP" },
+        { state: "Netherlands", code: "NL" },
+        { state: "Netherlands Antilles", code: "AN" },
+        { state: "New Caledonia", code: "NC" },
+        { state: "New Zealand", code: "NZ" },
+        { state: "Nicaragua", code: "NI" },
+        { state: "Niger", code: "NE" },
+        { state: "Nigeria", code: "NG" },
+        { state: "Niue", code: "NU" },
+        { state: "Norfolk Island", code: "NF" },
+        { state: "Northern Mariana Islands", code: "MP" },
+        { state: "Norway", code: "NO" },
+        { state: "Oman", code: "OM" },
+        { state: "Pakistan", code: "PK" },
+        { state: "Palau", code: "PW" },
+        { state: "Palestinian Territory, Occupied", code: "PS" },
+        { state: "Panama", code: "PA" },
+        { state: "Papua New Guinea", code: "PG" },
+        { state: "Paraguay", code: "PY" },
+        { state: "Peru", code: "PE" },
+        { state: "Philippines", code: "PH" },
+        { state: "Pitcairn", code: "PN" },
+        { state: "Poland", code: "PL" },
+        { state: "Portugal", code: "PT" },
+        { state: "Puerto Rico", code: "PR" },
+        { state: "Qatar", code: "QA" },
+        { state: "Reunion", code: "RE" },
+        { state: "Romania", code: "RO" },
+        { state: "Russian Federation", code: "RU" },
+        { state: "RWANDA", code: "RW" },
+        { state: "Saint Helena", code: "SH" },
+        { state: "Saint Kitts and Nevis", code: "KN" },
+        { state: "Saint Lucia", code: "LC" },
+        { state: "Saint Pierre and Miquelon", code: "PM" },
+        { state: "Saint Vincent and the Grenadines", code: "VC" },
+        { state: "Samoa", code: "WS" },
+        { state: "San Marino", code: "SM" },
+        { state: "Sao Tome and Principe", code: "ST" },
+        { state: "Saudi Arabia", code: "SA" },
+        { state: "Senegal", code: "SN" },
+        { state: "Serbia and Montenegro", code: "CS" },
+        { state: "Seychelles", code: "SC" },
+        { state: "Sierra Leone", code: "SL" },
+        { state: "Singapore", code: "SG" },
+        { state: "Slovakia", code: "SK" },
+        { state: "Slovenia", code: "SI" },
+        { state: "Solomon Islands", code: "SB" },
+        { state: "Somalia", code: "SO" },
+        { state: "South Africa", code: "ZA" },
+        { state: "South Georgia and the South Sandwich Islands", code: "GS" },
+        { state: "Spain", code: "ES" },
+        { state: "Sri Lanka", code: "LK" },
+        { state: "Sudan", code: "SD" },
+        { state: "Suriname", code: "SR" },
+        { state: "Svalbard and Jan Mayen", code: "SJ" },
+        { state: "Swaziland", code: "SZ" },
+        { state: "Sweden", code: "SE" },
+        { state: "Switzerland", code: "CH" },
+        { state: "Syrian Arab Republic", code: "SY" },
+        { state: "Taiwan, Province of China", code: "TW" },
+        { state: "Tajikistan", code: "TJ" },
+        { state: "Tanzania, United Republic of", code: "TZ" },
+        { state: "Thailand", code: "TH" },
+        { state: "Timor-Leste", code: "TL" },
+        { state: "Togo", code: "TG" },
+        { state: "Tokelau", code: "TK" },
+        { state: "Tonga", code: "TO" },
+        { state: "Trinidad and Tobago", code: "TT" },
+        { state: "Tunisia", code: "TN" },
+        { state: "Turkey", code: "TR" },
+        { state: "Turkmenistan", code: "TM" },
+        { state: "Turks and Caicos Islands", code: "TC" },
+        { state: "Tuvalu", code: "TV" },
+        { state: "Uganda", code: "UG" },
+        { state: "Ukraine", code: "UA" },
+        { state: "United Arab Emirates", code: "AE" },
+        { state: "United Kingdom", code: "GB" },
+        { state: "United States", code: "US" },
+        { state: "United States Minor Outlying Islands", code: "UM" },
+        { state: "Uruguay", code: "UY" },
+        { state: "Uzbekistan", code: "UZ" },
+        { state: "Vanuatu", code: "VU" },
+        { state: "Venezuela", code: "VE" },
+        { state: "Viet Nam", code: "VN" },
+        { state: "Virgin Islands, British", code: "VG" },
+        { state: "Virgin Islands, U.S.", code: "VI" },
+        { state: "Wallis and Futuna", code: "WF" },
+        { state: "Western Sahara", code: "EH" },
+        { state: "Yemen", code: "YE" },
+        { state: "Zambia", code: "ZM" },
+        { state: "Zimbabwe", code: "ZW" }
       ]
     };
-  },
-  computed: {
-    countrySelected: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit("input", val);
-      }
-    }
   }
 };
 </script>

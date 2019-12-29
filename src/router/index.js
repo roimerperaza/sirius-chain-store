@@ -4,41 +4,41 @@ import store from '../store';
 
 Vue.use(VueRouter)
 
-const load = view => {
+const loadView = view => {
   return () => import(`@/views/${view}.vue`)
 }
 
 const routes = [{
   path: '/',
-  component: load('Home'),
+  component: loadView('Home'),
   meta: {
     requiresAuth: true
   }
 }, {
   path: '/home',
   name: 'home',
-  component: load('Home'),
+  component: loadView('Home'),
   meta: {
     requiresAuth: true
   }
 }, {
   path: '/auth',
   name: 'auth',
-  component: load('Auth'),
+  component: loadView('Auth'),
   meta: {
     requiresNotAuth: true
   }
 }, {
   path: '/profile',
   name: 'profile',
-  component: load('Profile'),
+  component: loadView('Profile'),
   children: [{
     path: 'account',
-    component: load('Account-detail'),
+    component: loadView('Account-detail'),
     name: 'AccountDetail'
   },{
     path: 'home',
-    component: load('Home'),
+    component: loadView('Home'),
     name: 'Home'
   }],
   meta: {

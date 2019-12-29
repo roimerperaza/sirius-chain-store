@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form v-model="valid" ref="form">
-      <v-container>
+      <template>
         <v-row>
           <!-- Name -->
           <v-col cols="12" md="6">
@@ -33,13 +33,12 @@
           </v-col>
 
           <!-- Username -->
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="6" v-if="fromAuth">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.username"
-              :readonly="!fromAuth"
               :loading="searchingUser"
-              :disabled="searchingUser"
+              :disabled="searchingUser || !fromAuth"
               :minlength="configForm.username.min"
               :maxlength="configForm.username.max"
               :counter="configForm.username.max"
@@ -68,7 +67,9 @@
             ></v-text-field>
           </v-col>
 
-          <!-- <pais v-model="formulario.pais"></pais> -->
+          <v-col cols="12" md="6" v-if="!fromAuth">
+            <country v-model="formValue.country"></country>
+          </v-col>
 
           <!-- Password -->
           <v-col cols="12" md="6">
@@ -93,7 +94,7 @@
           </v-col>
 
           <!-- Confirm Password -->
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="6" v-if="fromAuth">
             <v-text-field
               color="fantasy"
               name="confirmPassword"
@@ -135,7 +136,7 @@
             >{{actionLabel}}</v-btn>
           </v-col>
         </v-row>
-      </v-container>
+      </template>
     </v-form>
   </div>
 </template>
@@ -149,7 +150,6 @@ export default {
   mixins: [generalMixins, accountMixin],
   props: ["fromAuth"],
   data: () => ({
-    showForm: false,
     configForm: null,
     sendingForm: false,
     valid: false,
@@ -162,16 +162,25 @@ export default {
       password: "",
       confirmPassword: "",
       email: "",
-      country: "",
+      country: null,
       dateBirth: ""
     }
   }),
   beforeMount() {
-    this.showForm = this.fromAuth;
-  },
-  created() {
     this.configForm = this.getConfigForm();
     this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500);
+    if (!this.fromAuth) {
+      const userData = this.$store.getters["accountStore/userData"];
+      this.formValue.name = userData.name;
+      this.formValue.lastname = userData.lastname;
+      this.formValue.username = userData.username;
+      this.formValue.email = userData.email;
+      this.formValue.country = userData.country;
+      this.formValue.dateBirth = userData.dateBirth;
+    }
+  },
+  components: {
+    country: () => import("@/components/Country")
   },
   computed: {
     actionLabel() {

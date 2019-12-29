@@ -50,6 +50,9 @@ export default {
 </script>
 
 <style scoped>
+.cursor-p{
+  cursor: pointer;
+}
 /*
 .fade-enter-active,
 .fade-leave-active {
