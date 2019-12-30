@@ -37,6 +37,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    showMSG({ commit }, data) {
+      commit("SHOW_SNACKBAR", data);
+    }
   },
   modules: {
     accountStore

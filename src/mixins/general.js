@@ -1,5 +1,21 @@
 export default {
     methods: {
+        doCopy(text) {
+            this.$copyText(text).then((e) => {
+                this.$store.dispatch('showMSG', {
+                    snackbar: true,
+                    text: `Copied`,
+                    color: "success"
+                })
+            }, (e) => {
+                console.log(e)
+                this.$store.dispatch('showMSG', {
+                    snackbar: true,
+                    text: `Can not copy`,
+                    color: "error"
+                })
+            })
+        },
         getConfigForm() {
             return {
                 generalRules: {

@@ -48,7 +48,7 @@
                     <v-container>
                       <v-row>
                         <v-col cols="9" class="mx-auto">
-                          <sign-up :fromAuth="true"></sign-up>
+                          <sign-up :actionUpdate="false"></sign-up>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -73,7 +73,7 @@ export default {
   }),
   components: {
     login: () => import("@/components/Login"),
-    'sign-up': () => import("@/components/Signup")
+    'sign-up': () => import("@/components/Signup-update")
   },
   methods: {
     changeTheme() {

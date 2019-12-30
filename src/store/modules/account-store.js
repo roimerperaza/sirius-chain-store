@@ -16,6 +16,9 @@ export const accountStore = {
             state.isLogged = (data && data.username && data.simpleWallet) ? true : false
             state.dataUser = data
         },
+        UPDATE_DATA_USER(state, data){
+            state.dataUser = data
+        },
         CHANGE_NAME_USER(state, name) {
             state.dataUser.name = name
         }

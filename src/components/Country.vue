@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-autocomplete
-      v-model="countrySelected"
+      v-model="paisSelected"
       :items="countries"
       item-text="state"
       item-value="code"
       label="Select country"
-      :hint="`${countrySelected.state}, ${countrySelected.code}`"
+      :hint="getHint"
       return-object
     ></v-autocomplete>
   </div>
@@ -14,9 +14,9 @@
 
 <script>
 export default {
+  props: ["countrySelected"],
   data() {
     return {
-      countrySelected: { state: "", code: "" },
       countries: [
         { state: "Afghanistan", code: "AF" },
         { state: "Åland Islands", code: "AX" },
@@ -263,6 +263,19 @@ export default {
         { state: "Zimbabwe", code: "ZW" }
       ]
     };
+  },
+  computed: {
+    paisSelected: {
+      get() {
+        return this.countrySelected;
+      },
+      set(val) {
+        this.$emit("input", val);
+      }
+    },
+    getHint() {
+      return (this.countrySelected.state !== '') ? `${this.countrySelected.state}, ${this.countrySelected.code}` : ''
+    }
   }
 };
 </script>

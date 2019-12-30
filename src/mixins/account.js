@@ -37,23 +37,53 @@ export default {
 
             return JSON.parse(users)
         },
-        saveUser(data) {
+        saveUser(data, update) {
             try {
                 const users = this.getUsers()
-                const { username, name, lastname, email, password, country, dateBirth } = data
-                if (!this.getByUsername(username)) {
-                    const toSave = { username, name, lastname, email, algo: 'pass:bip32', country, dateBirth }
-                    toSave['simpleWallet'] = this.$blockchainProvider.createAccountSimple(username, password)
-                    users.push(toSave)
-                    this.$storage.set(`users`, users)
-                    return toSave
+                const currentUser = this.getByUsername(data.username)
+                if (!update && !currentUser) {
+                    const response = this.register(data, users);
+                    return response
+                } else if (update && currentUser) {
+                    const response = this.update(data, users, currentUser);
+                    return response
                 }
-
                 return null
             } catch (error) {
                 return null
             }
 
+        },
+        register(data, users) {
+            const toSave = {
+                username: data.username,
+                name: data.name,
+                lastname: data.lastname,
+                email: data.email,
+                algo: 'pass:bip32',
+                country: data.country,
+                dateBirth: data.dateBirth
+            }
+            toSave['simpleWallet'] = this.$blockchainProvider.createAccountSimple(data.username, data.password)
+            users.push(toSave)
+            this.$storage.set(`users`, users)
+            return toSave
+        },
+        update(data, users, currentUser) {
+            const toSave = {
+                username: currentUser.username,
+                name: data.name,
+                lastname: data.lastname,
+                email: data.email,
+                algo: 'pass:bip32',
+                country: data.country,
+                dateBirth: data.dateBirth
+            }
+            toSave['simpleWallet'] = currentUser.simpleWallet
+            const othersUsers = users.filter(x => x.username !== currentUser.username)
+            othersUsers.push(toSave)
+            this.$storage.set(`users`, othersUsers)
+            return toSave
         }
     }
 }

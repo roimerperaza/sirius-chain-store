@@ -11,10 +11,13 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
 import { BlockchainProvider } from './services/blockchain-provider'
+import VueClipboard from 'vue-clipboard2'
+
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)
 Vue.use(VueAxios, axios);
+Vue.use(VueClipboard)
 Vue.config.productionTip = false
 
 // Define prototype

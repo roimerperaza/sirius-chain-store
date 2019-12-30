@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form v-model="valid" ref="form">
-      <template>
+      <v-container>
         <v-row>
           <!-- Name -->
           <v-col cols="12" md="6">
@@ -19,7 +19,7 @@
           </v-col>
 
           <!-- Lastname -->
-          <v-col cols="12" md="6" v-if="!fromAuth">
+          <v-col cols="12" md="6">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.lastname"
@@ -33,12 +33,12 @@
           </v-col>
 
           <!-- Username -->
-          <v-col cols="12" md="6" v-if="fromAuth">
+          <v-col cols="12" md="6" v-if="!actionUpdate">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.username"
               :loading="searchingUser"
-              :disabled="searchingUser || !fromAuth"
+              :disabled="searchingUser"
               :minlength="configForm.username.min"
               :maxlength="configForm.username.max"
               :counter="configForm.username.max"
@@ -55,7 +55,7 @@
           </v-col>
 
           <!-- Email -->
-          <v-col cols="12" md="6" v-if="!fromAuth">
+          <v-col cols="12" md="6" v-if="actionUpdate">
             <v-text-field
               color="fantasy"
               v-model.trim="formValue.email"
@@ -67,8 +67,8 @@
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="6" v-if="!fromAuth">
-            <country v-model="formValue.country"></country>
+          <v-col cols="12" md="6" v-if="actionUpdate">
+            <country :countrySelected="formValue.country" v-model="formValue.country"></country>
           </v-col>
 
           <!-- Password -->
@@ -94,7 +94,7 @@
           </v-col>
 
           <!-- Confirm Password -->
-          <v-col cols="12" md="6" v-if="fromAuth">
+          <v-col cols="12" md="6" v-if="!actionUpdate">
             <v-text-field
               color="fantasy"
               name="confirmPassword"
@@ -133,10 +133,10 @@
               outlined
               color="fantasy"
               @click="submit"
-            >{{actionLabel}}</v-btn>
+            >{{actionLabel()}}</v-btn>
           </v-col>
         </v-row>
-      </template>
+      </v-container>
     </v-form>
   </div>
 </template>
@@ -148,7 +148,7 @@ import accountMixin from "../mixins/account";
 
 export default {
   mixins: [generalMixins, accountMixin],
-  props: ["fromAuth"],
+  props: ["actionUpdate"],
   data: () => ({
     configForm: null,
     sendingForm: false,
@@ -162,20 +162,23 @@ export default {
       password: "",
       confirmPassword: "",
       email: "",
-      country: null,
+      country: { state: "", code: "" },
       dateBirth: ""
     }
   }),
   beforeMount() {
     this.configForm = this.getConfigForm();
     this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500);
-    if (!this.fromAuth) {
+    if (this.actionUpdate) {
       const userData = this.$store.getters["accountStore/userData"];
       this.formValue.name = userData.name;
       this.formValue.lastname = userData.lastname;
       this.formValue.username = userData.username;
       this.formValue.email = userData.email;
-      this.formValue.country = userData.country;
+      this.formValue.country = {
+        state: userData.country.state,
+        code: userData.country.code
+      };
       this.formValue.dateBirth = userData.dateBirth;
     }
   },
@@ -183,9 +186,6 @@ export default {
     country: () => import("@/components/Country")
   },
   computed: {
-    actionLabel() {
-      return this.fromAuth ? "REGISTER" : "UPDATE";
-    },
     disabledConfirmPassword() {
       const password = this.formValue.password;
       if (password) {
@@ -200,14 +200,22 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("accountStore", ["UPDATE_DATA_USER"]),
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
+    actionLabel() {
+      return this.actionUpdate ? "UPDATE" : "REGISTER";
+    },
     submit() {
       this.sendingForm = true;
       this.SHOW_LOADING(true);
       setTimeout(() => {
-        const save = this.saveUser(this.formValue);
+        const save = this.saveUser(this.formValue, this.actionUpdate);
         this.SHOW_LOADING(false);
         if (save) {
+          if (this.actionUpdate) {
+              this.UPDATE_DATA_USER(save)
+          }
+
           this.reset();
           this.SHOW_SNACKBAR({
             snackbar: true,
@@ -229,6 +237,7 @@ export default {
       this.searchingUser = false;
       this.sendingForm = false;
       this.$refs.form.reset();
+      this.formValue.country = { state: "", code: "" };
     },
     validateUser() {
       const usr = this.formValue.username;
