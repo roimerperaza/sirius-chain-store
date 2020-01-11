@@ -76,8 +76,8 @@ import accountMixin from "../mixins/account";
 export default {
   mixins: [generalMixins, accountMixin],
   data: () => ({
-    username: "rperaza",
-    password: "1qazxsw2",
+    username: "",
+    password: "",
     configForm: null,
     isValidForm: false,
     sendingForm: false
