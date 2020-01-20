@@ -2,9 +2,10 @@
   <div style="display: flex; align-items: center; height: 100%;">
     <v-layout>
       <v-container>
-        <v-card class="mx-auto" >
+        <v-card class="mx-auto">
           <v-container class="p-0">
             <v-row class="mx-auto">
+              <!-- Carousel -->
               <v-col cols="12" sm="5" md="4" class="p-0 d-none d-sm-block">
                 <v-carousel cycle :show-arrows="showArrows">
                   <v-carousel-item
@@ -17,7 +18,7 @@
                     <div class="d-flex justify-center">
                       <img :src="require(`@/assets/img/login/step${item}.png`)" alt="Proximax Logo" />
                     </div>
-                    <v-card-title class="justify-center color-card-text">Blockchain Store App</v-card-title>
+                    <v-card-title class="justify-center color-card-text">{{nameApp}}</v-card-title>
                   </v-carousel-item>
                 </v-carousel>
               </v-col>
@@ -44,14 +45,14 @@
                   </v-tab-item>
 
                   <v-tab-item value="tab-register">
-                    <v-card flat color="transparent">
-                      <sign-up></sign-up>
-                    </v-card>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="9" class="mx-auto">
+                          <sign-up :actionUpdate="false"></sign-up>
+                        </v-col>
+                      </v-row>
+                    </v-container>
                   </v-tab-item>
-
-                  <!-- <div class="d-flex justify-center">
-                    <span class="pointer" @click="changeTheme">Change Theme</span>
-                  </div>-->
                 </v-tabs-items>
               </v-col>
             </v-row>
@@ -63,27 +64,28 @@
 </template>
 
 <script>
-import SignUp from "@/components/Signup";
-import Login from "@/components/Login";
 export default {
   inject: ["theme"],
   data: () => ({
+    nameApp: "",
     showArrows: false,
     tab: null
   }),
   components: {
-    "sign-up": SignUp,
-    login: Login
+    login: () => import("@/components/Login"),
+    'sign-up': () => import("@/components/Signup-update")
   },
   methods: {
     changeTheme() {
       this.$vuetify.theme.isDark = !this.$vuetify.theme.isDark;
-      console.log(this.$vuetify);
       const theme = this.$vuetify.theme.isDark
         ? this.$vuetify.theme.themes.dark
         : this.$vuetify.theme.themes.light;
       this.$vuetify.theme.currentTheme = theme;
     }
+  },
+  beforeMount() {
+    this.nameApp = this.$store.getters.nameApp;
   }
 };
 </script>

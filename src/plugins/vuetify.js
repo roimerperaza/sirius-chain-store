@@ -38,42 +38,6 @@ export default new Vuetify({
         warning: '#FFC107',
         fantasy: colors.teal
       }
-    },
+    }
   },
 });
-
-/*
----current----
-primary: colors.grey.lighten4,
-secondary: '#424242',
-accent: colors.blue.lighten5,
-error: colors.orange,
-info: colors.blue.lighten5,
-success: colors.blue,
-warning: colors.blue.lighten5,
-fantasy: colors.teal
-
-*/
-
-
-/*
-primary: '#ee44aa',
-secondary: '#424242',
-accent: '#82B1FF',
-error: '#FF5252',
-info: '#2196F3',
-success: '#4CAF50',
-warning: '#FFC107',
-fantasy: '#272262'
-*/
-
-/*
-primary: colors.indigo.darken1,
-secondary: '#424242',
-accent: '#82B1FF',
-error: colors.red.darken1,
-info: '#2196F3',
-success: '#4CAF50',
-warning: '#FFC107',
-fantasy: '#272262'
-*/

@@ -1,5 +1,8 @@
 <template >
   <v-app>
+    <!-- Menu -->
+    <menu-item v-if="isLogged"></menu-item>
+
     <!-- Overlay -->
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -23,20 +26,43 @@
 
     <!-- Content -->
     <v-content>
-      <v-container style="height: 100%;">
-        <router-view></router-view>
-      </v-container>
+      <transition name="fade" mode="out-in">
+        <router-view :key="$route.path"></router-view>
+      </transition>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "App",
+  data: () => ({}),
+  components: {
+    "menu-item": () => import("@/components/Menu")
+  },
   computed: {
-    ...mapState(["overlay", "snackbar"])
+    ...mapState(["overlay", "snackbar"]),
+    ...mapGetters("accountStore", ["isLogged"])
   }
 };
 </script>
+
+<style scoped>
+.cursor-p{
+  cursor: pointer;
+}
+/*
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.1s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}*/
+</style>

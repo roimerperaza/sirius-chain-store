@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { accountStore } from './modules/account-store';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     configInfo: null,
     environment: null,
-    isLogged: false,
-    dataUser: null,
     overlay: false,
     snackbar: {
       color: '',
@@ -19,24 +18,30 @@ export default new Vuex.Store({
       y: 'top'
     }
   },
+  getters: {
+    nameApp: state => state.configInfo.nameApp,
+    pseudonymApp: state => state.configInfo.pseudonymApp
+  },
   mutations: {
     ADD_CONFIG_INFO(state, data) {
       state.configInfo = data
-    },
-    LOGIN(state, data) {
-      state.isLogged = (data) ? true : false;
-      state.dataUser = data;
     },
     SHOW_LOADING(state, value) {
       state.overlay = value
     },
     SHOW_SNACKBAR(state, data) {
-      state.snackbar.snackbar = data.snackbar
-      state.snackbar.text = data.text
-      state.snackbar.color = data.color
+      const { snackbar, text, color } = data
+      state.snackbar.snackbar = snackbar
+      state.snackbar.text = text
+      state.snackbar.color = color
     }
   },
-  actions: {},
+  actions: {
+    showMSG({ commit }, data) {
+      commit("SHOW_SNACKBAR", data);
+    }
+  },
   modules: {
+    accountStore
   }
 })

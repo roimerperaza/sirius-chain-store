@@ -1,5 +1,7 @@
 {
   "version": "TEST_NET",
+  "nameApp": "Blockchain Store App",
+  "pseudonymApp": "Blockchain Store",
   "environment": {
     "TESTNET": {
       "coin": "xpx",
@@ -13,11 +15,12 @@
       },
       "connectionNodes": {
         "networkType": "TEST_NET",
-        "protocol": "http",
+        "protocol": "https",
+        "protocolWs": "wss",
         "nodes": [
-          "18.138.51.117",
-          "13.229.155.165",
-          "13.251.128.180"
+          "bctestnet1.brimstone.xpxsirius.io",
+          "bctestnet2.brimstone.xpxsirius.io",
+          "bctestnet3.brimstone.xpxsirius.io"
         ]
       },
       "rentalFeeSink": {
@@ -47,10 +50,18 @@
       "connectionNodes": {
         "networkType": "MAIN_NET",
         "protocol": "https",
+        "protocolWs": "wss",
         "nodes": [
-          "18.138.51.117",
-          "13.229.155.165",
-          "13.251.128.180"
+          "arcturus.xpxsirius.io",
+          "aldebaran.xpxsirius.io",
+          "betelgeuse.xpxsirius.io",
+          "bigcalvin.xpxsirius.io",
+          "westerlund.xpxsirius.io",
+          "canismajor.xpxsirius.io",
+          "coronaborealis.xpxsirius.io",
+          "delphinus.xpxsirius.io",
+          "eridanus.xpxsirius.io",
+          "lyrasithara.xpxsirius.io"
         ]
       },
       "rentalFeeSink": {

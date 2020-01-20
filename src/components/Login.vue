@@ -19,7 +19,7 @@
                   configForm.generalRules.notAllowSpaces
                 ]"
                 :label="configForm.username.label"
-                @keyup="deleteSpaces()"
+                @keyup="username = removeSpaces(username)"
               ></v-text-field>
             </v-col>
 
@@ -70,54 +70,53 @@
 
 <script>
 import { mapMutations } from "vuex";
+import generalMixins from "../mixins/general";
+import accountMixin from "../mixins/account";
+
 export default {
+  mixins: [generalMixins, accountMixin],
   data: () => ({
-    sendingForm: false,
+    username: "",
+    password: "",
     configForm: null,
     isValidForm: false,
-    username: "",
-    password: ""
+    sendingForm: false
   }),
+  created() {
+    this.configForm = this.getConfigForm();
+  },
   methods: {
-    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING", "LOGIN"]),
-    deleteSpaces() {
-      if (this.username) {
-        this.username = this.username.replace(/ /g, "");
-      }
+    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
+    ...mapMutations("accountStore", ["LOGIN"]),
+    emitEventForm(text, color, status = false) {
+      this.sendingForm = false;
+      this.SHOW_LOADING(status);
+      this.SHOW_SNACKBAR({
+        snackbar: true,
+        text: text,
+        color: color
+      });
     },
     submit() {
       if (this.isValidForm) {
         this.sendingForm = true;
         this.SHOW_LOADING(true);
         setTimeout(() => {
-          const login = this.$storage.login(this.username, this.password);
-          if (login) {
-            this.sendingForm = false;
-            this.SHOW_LOADING(false);
-            this.LOGIN(login);
-            this.SHOW_SNACKBAR({snackbar: true, text: `Hi ${login.name}, welcome!`, color: 'success'});
+          const userData = this.decrypt(this.username, this.password);
+          if (userData) {
+            this.LOGIN(userData);
+            this.emitEventForm(`Hi ${userData.name}, welcome!`, "success");
             this.$router.push("/home").catch(e => {});
           } else {
-            this.sendingForm = false;
-            this.SHOW_LOADING(false);
-            this.SHOW_SNACKBAR({snackbar: true, text: 'Invalid username or password', color: 'errorIntense'});
-            this.$router.push("/home").catch(e => {});
+            this.emitEventForm("Combination of username and / or password is invalid.", "errorIntense");
           }
-        }, 1500);
+        }, 500);
       }
     },
     reset() {
       this.sendingForm = false;
       this.$refs.form.reset();
     }
-  },
-  watch: {
-    user() {
-      this.user = this.user.replace(/ /g, "");
-    }
-  },
-  created() {
-    this.configForm = this.$utils.getConfigForm();
   }
 };
 </script>

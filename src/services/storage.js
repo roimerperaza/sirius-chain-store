@@ -1,5 +1,3 @@
-import {ProximaxProvider} from './proximaxProvider'
-
 class StorageService {
 
     storage = null;
@@ -9,21 +7,6 @@ class StorageService {
         this.storage = typeStorage
     }
 
-    /**
-     *
-     *
-     * @param {*} username
-     * @param {*} password
-     * @memberof StorageService
-     */
-    login(username, password) {
-        const user = this.getUserByUsername(username);
-        if (user && user.password === password) {
-            return user;
-        }
-
-        return null;
-    }
 
     /**
      *
@@ -43,48 +26,6 @@ class StorageService {
     */
     get(item) {
         return this.storage.getItem(`${this.correlative}-${item}`)
-    }
-
-    /**
-    * Get users
-    *
-    * @memberof StorageService
-    */
-    getUsers() {
-        let users = this.get(`users`);
-        if (!users) {
-            this.set(`users`, []);
-            users = this.getUsers();
-        }
-
-        return users;
-    }
-
-    /**
-     *
-     *
-     * @memberof StorageService
-     */
-    getUserByUsername(username) {
-        const users = JSON.parse(this.getUsers());
-        if (users && users.length > 0) {
-            return users.find(x => x.username === username);
-        }
-
-        return null;
-    }
-
-    /**
-     *
-     *
-     * @param {*} user
-     * @memberof StorageService
-     */
-    saveUser(user) {
-        const users = JSON.parse(this.getUsers());
-        users.push(user);
-        this.set(`users`, users);
-        return true;
     }
 
     /**

@@ -2,26 +2,27 @@
   <div>
     <v-layout>
       <v-container>
-        IS HOME <br>
-        <v-btn @click="goToHome(true)">LOG OUT</v-btn> <br><br>
-        <v-btn @click="goToHome(false)">GO TO LOGIN</v-btn>
+        Hi,
+        <b>{{userData.username}}</b> your address is:
+        <br />
+        <b>{{getAddress.pretty()}}</b>
       </v-container>
     </v-layout>
   </div>
 </template>
 
 <script>
-export default {
-  data: () => ({
-  }),
-  methods: {
-    goToHome(logout) {
-      if (logout) {
-        this.$store.dispatch('login', null)
-      }
+import { mapGetters } from "vuex";
 
-      this.$router.push('/auth').catch(e => {})
+export default {
+  data: () => ({}),
+  computed: {
+    ...mapGetters("accountStore", ["userData", "address"]),
+    getAddress() {
+      return this.$blockchainProvider.createFromRawAddress(
+        this.address
+      );
     }
-  },
+  }
 };
 </script>
