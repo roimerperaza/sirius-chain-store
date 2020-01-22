@@ -40,18 +40,18 @@
                 <v-tabs-items v-model="tab">
                   <v-tab-item background-color="transparent" value="tab-login">
                     <v-card flat color="transparent">
-                      <div class="d-flex align-center justify-center pt-9">
-                        <v-img :src="qrImageLogin" max-width="200" max-height="200"></v-img>
-                      </div>
+                      <login></login>
                     </v-card>
                   </v-tab-item>
 
-                  <v-tab-item background-color="transparent" value="tab-register">
-                    <v-card flat color="transparent">
-                      <div class="d-flex align-center justify-center pt-9">
-                        <v-img :src="qrImageSignp" max-width="200" max-height="200"></v-img>
-                      </div>
-                    </v-card>
+                  <v-tab-item value="tab-register">
+                    <v-container>
+                      <v-row>
+                        <v-col cols="9" class="mx-auto">
+                          <sign-up :actionUpdate="false"></sign-up>
+                        </v-col>
+                      </v-row>
+                    </v-container>
                   </v-tab-item>
                 </v-tabs-items>
               </v-col>
@@ -69,12 +69,11 @@ export default {
   data: () => ({
     nameApp: "",
     showArrows: false,
-    tab: null,
-    qrLogin: "",
-    qrSignup: ""
+    tab: null
   }),
   components: {
-    "sign-up": () => import("@/components/Signup")
+    login: () => import("@/components/Login"),
+    'sign-up': () => import("@/components/Signup-update")
   },
   methods: {
     changeTheme() {
@@ -85,19 +84,8 @@ export default {
       this.$vuetify.theme.currentTheme = theme;
     }
   },
-  computed: {
-    qrImageLogin() {
-      return this.qrLogin !== "" ? "" + this.qrLogin : "";
-    },
-    qrImageSignp() {
-      return this.qrSignup !== "" ? "" + this.qrSignup : "";
-    }
-  },
-  async beforeMount() {
+  beforeMount() {
     this.nameApp = this.$store.getters.nameApp;
-    this.qrLogin = await this.$store.dispatch("siriusIDStore/createLoginMessage");
-    this.qrSignup = await this.$store.dispatch("siriusIDStore/createCredential");
-    this.$store.dispatch("siriusIDStore/initWebsocket");
   }
 };
 </script>

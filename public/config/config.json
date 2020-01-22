@@ -1,7 +1,7 @@
 {
   "version": "TEST_NET",
-  "nameApp": "Blockchain Store App",
-  "pseudonymApp": "Blockchain Store",
+  "nameApp": "Sirius Chain Store",
+  "pseudonymApp": "Sirius Chain Store",
   "environment": {
     "TESTNET": {
       "coin": "xpx",

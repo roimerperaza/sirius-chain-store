@@ -1,7 +1,7 @@
 <template >
   <v-app>
     <!-- Menu -->
-    <menu-item v-if="isLogged"></menu-item>
+    <menu-item></menu-item>
 
     <!-- Overlay -->
     <v-overlay :value="overlay">
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-.cursor-p{
+.cursor-p {
   cursor: pointer;
 }
 /*

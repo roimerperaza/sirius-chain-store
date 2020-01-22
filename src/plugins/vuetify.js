@@ -6,7 +6,7 @@ Vue.use(Vuetify);
 
 export default new Vuetify({
   theme: {
-    dark: true,
+    dark: false,
     options: {
       customProperties: true,
       minifyTheme: function (css) {
@@ -25,7 +25,7 @@ export default new Vuetify({
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#FFC107',
-        fantasy: '#272262'
+        fantasy: '#272262',
       },
       dark: {
         primary: colors.indigo.lighten5,

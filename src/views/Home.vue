@@ -2,27 +2,14 @@
   <div>
     <v-layout>
       <v-container>
-        Hi,
-        <b>{{userData.username}}</b> your address is:
-        <br />
-        <b>{{getAddress.pretty()}}</b>
+        asdasdasd
       </v-container>
     </v-layout>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   data: () => ({}),
-  computed: {
-    ...mapGetters("accountStore", ["userData", "address"]),
-    getAddress() {
-      return this.$blockchainProvider.createFromRawAddress(
-        this.address
-      );
-    }
-  }
 };
 </script>

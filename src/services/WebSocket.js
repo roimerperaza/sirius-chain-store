@@ -4,13 +4,15 @@ import {
     Address
 } from 'tsjs-xpx-chain-sdk'
 
-import { ProximaxProvider } from './proximaxProvider'
-
-export default class WebSocketProvider {
+class WebSocketProvider {
 
     connector = [];
     audio = new Audio('assets/audio/ding.ogg');
     audio2 = new Audio('assets/audio/ding2.ogg');
+
+    constructor() {
+        console.log('initialized')
+    }
 
     /**
      *
@@ -184,3 +186,5 @@ export default class WebSocketProvider {
     }
 
 }
+
+export { WebSocketProvider }

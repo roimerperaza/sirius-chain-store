@@ -10,9 +10,16 @@ const loadView = view => {
 
 const routes = [{
   path: '/',
-  component: loadView('Home'),
+  component: loadView('Dashboard'),
   meta: {
-    requiresAuth: true
+    requiresAuth: false
+  }
+},{
+  path: '/dashboard',
+  name: 'dashboard',
+  component: loadView('Dashboard'),
+  meta: {
+    requiresAuth: false
   }
 }, {
   path: '/home',
@@ -56,7 +63,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  /*const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresNotAuth = to.matched.some(record => record.meta.requiresNotAuth);
   if (requiresAuth && !store.getters['accountStore/isLogged']) {
     next('/auth');
@@ -64,7 +71,8 @@ router.beforeEach(async (to, from, next) => {
     next('/home');
   } else {
     next();
-  }
+  }*/
+  next();
 });
 
 export default router
