@@ -110,3 +110,14 @@ hr {
 
 /******************/
 
+.pt-48{
+    padding-top: 48px !important;
+}
+
+.h-100vh{
+    height: 100vh;
+}
+
+.h-100porcent{
+    height: 100%;
+}

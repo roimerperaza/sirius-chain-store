@@ -1,8 +1,19 @@
 <template>
   <div>
-    <!-- Navigation Drawer -->
-    <!-- <v-navigation-drawer v-model="drawer" absolute temporary app mini-variant> -->
+    <!-- DIALOG -->
+    <template v-if="dialog">
+      <full-dialog
+        :config="{name: 'Sirius Chain Store', 'btn': '', color: 'dark'}"
+        :dialog="dialog"
+        @dialog="dialog = $event"
+      >
+        <template slot="body">
+          <auth></auth>
+        </template>
+      </full-dialog>
+    </template>
 
+    <!-- Navigation panel -->
     <v-navigation-drawer dark v-model="drawer" app mobile-break-point="1024">
       <v-list-item>
         <v-list-item-avatar>
@@ -50,9 +61,9 @@
         <template>
           <v-tooltip bottom :key="key">
             <template v-slot:activator="{ on }">
-              <v-btn icon dark v-on="on" @click="goToHome">
+              <v-btn icon dark v-on="on" @click="action(item.action)">
                 <v-badge icon dark overlap top color="red" v-if="item.badge">
-                  <span slot="badge">6</span>
+                  <span slot="badge">{{item.badgeNumber}}</span>
                   <v-avatar :id="item.id">
                     <v-btn icon dark>
                       <v-icon>{{item.icon}}</v-icon>
@@ -76,6 +87,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    dialog: false,
     drawer: false,
     links: [
       { title: "Home", icon: "mdi-view-dashboard", route: "/home" },
@@ -87,23 +99,37 @@ export default {
         text: "My Cart",
         icon: "mdi-cart",
         action: "",
-        badge: true
+        badge: true,
+        badgeNumber: "6"
       },
       {
         id: "my-account",
         text: "My Account",
         icon: "mdi-account",
-        action: "",
+        action: "authDialog",
         badge: false
       }
     ]
   }),
   methods: {
     ...mapActions("accountStore", ["LOGOUT"]),
+    action(type) {
+      switch (type) {
+        case "authDialog":
+          this.dialog = true;
+          break;
+        default:
+          break;
+      }
+    },
     goToHome() {
       this.LOGOUT(null);
       this.$router.push("/auth").catch(e => {});
     }
+  },
+  components: {
+    "full-dialog": () => import("@/components/Dialog"),
+    auth: () => import("@/components/Auth")
   },
   computed: {
     ...mapGetters(["pseudonymApp"]),

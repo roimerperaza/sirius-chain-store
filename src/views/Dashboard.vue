@@ -1,6 +1,5 @@
 <template>
   <div id="dashboard">
-
     <!-- Carousel -->
     <my-carousel></my-carousel>
 
@@ -11,7 +10,6 @@
     <template v-if="config && config.length > 0">
       <products :products="config"></products>
     </template>
-    
   </div>
 </template>
 
