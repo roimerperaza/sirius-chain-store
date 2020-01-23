@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { accountStore } from './modules/account-store';
 import { siriusIDStore } from './modules/sirius-id';
+import { productsStore } from './modules/products-store';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -44,6 +45,7 @@ export default new Vuex.Store({
   },
   modules: {
     accountStore,
-    siriusIDStore
+    siriusIDStore,
+    productsStore
   }
 })

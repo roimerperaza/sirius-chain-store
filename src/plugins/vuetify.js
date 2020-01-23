@@ -17,7 +17,7 @@ export default new Vuetify({
     },
     themes: {
       light: {
-        primary: colors.indigo.lighten5,
+        primary: "#4285F4",
         secondary: '#424242',
         accent: '#82B1FF',
         error: colors.red.darken1,
@@ -26,6 +26,8 @@ export default new Vuetify({
         success: '#4CAF50',
         warning: '#FFC107',
         fantasy: '#272262',
+        dacota: "#8a4f53",
+        terra: "#e53935"
       },
       dark: {
         primary: colors.indigo.lighten5,
@@ -36,7 +38,9 @@ export default new Vuetify({
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#FFC107',
-        fantasy: colors.teal
+        fantasy: colors.teal,
+        dacota: "#8a4f53",
+        terra: "#e53935"
       }
     }
   },

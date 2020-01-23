@@ -1,0 +1,112 @@
+/* ---------- GLOBAL ----------
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&display=swap&subset=latin-ext');
+
+
+/** VUETIFY THEME **/
+.v-application, html, body {
+    font-family: 'Lato', 'Arial', 'Helvetica', 'sans-serif' !important;
+}
+
+.theme--light.v-application {
+    background: white !important;
+}
+
+.theme--light.v-footer {
+    background-color: #f5f5f500 !important;
+}
+
+.v-text-field .v-label{
+    font-size: 12px !important;
+}
+
+.v-alert:not(.v-sheet--tile) {
+    border-radius: 20px !important;
+}
+
+.v-alert--prominent .v-alert__icon:after {
+    opacity: 0.2 !important;
+}
+
+/**OTHER STYLE**/
+
+hr {
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#amount{
+    text-align: right;
+}
+
+.text-transform-none {
+    text-transform: none !important;
+}
+
+.overflow-ellipsis-nowrap {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.word-break-all {
+    word-break: break-all;
+}
+
+.w-w-b-w {
+    word-wrap: break-word;
+}
+
+.box-gray{
+    padding: 10px 20px 10px 20px !important;
+    border-radius: 20px;
+    background: #f4f4f4;
+    color: #333333;
+    font-size: .9rem !important;
+}
+
+.line-h-1-02em {
+    line-height: 1.2em !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-gray-5px {
+    border: 8px solid #f4f4f4
+}
+
+.background-blue-gradient {
+    background: -webkit-linear-gradient(top, #5aa6db, #306EB5);
+}
+
+.text-d-none{
+    text-decoration: none;
+}
+
+/** FONT-SIZE **/
+.fs-07rem{
+    font-size: .7rem;
+}
+
+.fs-08rem{
+    font-size: .8rem;
+}
+
+.fs-085rem{
+    font-size: .85rem;
+}
+
+.fs-09rem{
+    font-size: .9rem;
+}
+
+.fs-1-2rem {
+    font-size: 1.2rem;
+}
+
+/******************/
+

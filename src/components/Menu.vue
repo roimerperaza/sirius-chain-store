@@ -42,39 +42,31 @@
     </v-navigation-drawer>
 
     <!-- Toolbar -->
-    <v-app-bar app dense dark id="menu">
+    <v-app-bar dark app dense id="menu">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!-- <v-avatar>
-        <img :src="require(`@/assets/pay.png`)"/>
-      </v-avatar>-->
       <v-toolbar-title>{{pseudonymApp}}</v-toolbar-title>
-
       <v-spacer></v-spacer>
+      <template v-for="(item, key) of itemsAppBar">
+        <template>
+          <v-tooltip bottom :key="key">
+            <template v-slot:activator="{ on }">
+              <v-btn icon dark v-on="on" @click="goToHome">
+                <v-badge icon dark overlap top color="red" v-if="item.badge">
+                  <span slot="badge">6</span>
+                  <v-avatar :id="item.id">
+                    <v-btn icon dark>
+                      <v-icon>{{item.icon}}</v-icon>
+                    </v-btn>
+                  </v-avatar>
+                </v-badge>
 
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon dark v-on="on" @click="goToHome">
-            <v-badge icon dark overlap top color="red">
-              <span slot="badge">6</span>
-              <v-avatar id="my-cart">
-                <v-btn icon dark>
-                  <v-icon>mdi-cart</v-icon>
-                </v-btn>
-              </v-avatar>
-            </v-badge>
-          </v-btn>
+                <v-icon v-else>{{item.icon}}</v-icon>
+              </v-btn>
+            </template>
+            <span>{{item.text}}</span>
+          </v-tooltip>
         </template>
-        <span>My Cart</span>
-      </v-tooltip>
-
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon dark v-on="on" @click="goToHome">
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </template>
-        <span>My Account</span>
-      </v-tooltip>
+      </template>
     </v-app-bar>
   </div>
 </template>
@@ -88,6 +80,22 @@ export default {
     links: [
       { title: "Home", icon: "mdi-view-dashboard", route: "/home" },
       { title: "Profile", icon: "mdi-account", route: "/profile/account" }
+    ],
+    itemsAppBar: [
+      {
+        id: "my-cart",
+        text: "My Cart",
+        icon: "mdi-cart",
+        action: "",
+        badge: true
+      },
+      {
+        id: "my-account",
+        text: "My Account",
+        icon: "mdi-account",
+        action: "",
+        badge: false
+      }
     ]
   }),
   methods: {
