@@ -15,7 +15,8 @@ export const siriusIDStore = {
     getters: {},
     mutations: {},
     actions: {
-        async createCredential() {
+        async createCredential({}, data) {
+            console.log(data)
             let content = new Map([
                 ['hola', 'mundo']
             ])

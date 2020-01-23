@@ -39,9 +39,9 @@
 
               <v-tab-item background-color="transparent" value="tab-register">
                 <v-card flat color="transparent">
-                  <div class="d-flex align-center justify-center pt-9">
+                  <div class="d-flex align-center justify-center pt-5">
                     <!-- <v-img :src="qrImageSignp" max-width="200" max-height="200"></v-img> -->
-                    <sign-up></sign-up>
+                    <sign-up class="mr-8 ml-8"></sign-up>
                   </div>
                 </v-card>
               </v-tab-item>

@@ -1,5 +1,24 @@
 export default {
   methods: {
+    createCredential (data) {
+      const response = this.createAccountBlockchain(data)
+      console.log('response --->', response)
+      return response;
+    },
+    createAccountBlockchain(data) {
+      const toSave = {
+        username: data.username,
+        name: data.name,
+        lastname: data.lastname,
+        email: data.email,
+        algo: 'pass:bip32',
+        country: data.country,
+        dateBirth: data.dateBirth
+      }
+
+      toSave['simpleWallet'] = this.$blockchainProvider.createAccountSimple(data.username, data.password)
+      return toSave
+    },
     decrypt (username, password) {
       const userData = this.getByUsername(username)
       if (userData) {

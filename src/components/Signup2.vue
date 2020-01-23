@@ -52,7 +52,7 @@
               :label="configForm.username.label"
               @keyup="formValue.username = removeSpaces(formValue.username)"
             ></v-text-field>
-          </v-col>-->
+          </v-col> -->
 
           <!-- Email -->
           <v-col cols="12" md="6" v-if="actionUpdate">
@@ -133,7 +133,7 @@
               outlined
               color="fantasy"
               @click="submit"
-            >REGISTER</v-btn>
+            >{{actionLabel()}}</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -168,6 +168,7 @@ export default {
   }),
   beforeMount() {
     this.configForm = this.getConfigForm();
+    this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500);
     if (this.actionUpdate) {
       const userData = this.$store.getters["accountStore/userData"];
       this.formValue.name = userData.name;
@@ -201,37 +202,34 @@ export default {
   methods: {
     ...mapMutations("accountStore", ["UPDATE_DATA_USER"]),
     ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
+    actionLabel() {
+      return this.actionUpdate ? "UPDATE" : "REGISTER";
+    },
     submit() {
       this.sendingForm = true;
       this.SHOW_LOADING(true);
-      setTimeout(async () => {
-        console.log(this.formValue)
-        const credentialData = this.createCredential(this.formValue);
-        console.log(credentialData)
-        // const qrSignup = await this.$store.dispatch("siriusIDStore/createCredential", {amount: 10});
+      setTimeout(() => {
+        const save = this.saveUser(this.formValue, this.actionUpdate);
+        this.SHOW_LOADING(false);
+        if (save) {
+          if (this.actionUpdate) {
+              this.UPDATE_DATA_USER(save)
+          }
 
-        // console.log(qrSignup)
-        // const save = this.saveUser(this.formValue, this.actionUpdate);
-        // this.SHOW_LOADING(false);
-        // if (save) {
-        //   if (this.actionUpdate) {
-        //       this.UPDATE_DATA_USER(save)
-        //   }
-
-        //   this.reset();
-        //   this.SHOW_SNACKBAR({
-        //     snackbar: true,
-        //     text: `Registered user successfully`,
-        //     color: "success"
-        //   });
-        // } else {
-        //   this.reset();
-        //   this.SHOW_SNACKBAR({
-        //     snackbar: true,
-        //     text: `Has ocurred a error`,
-        //     color: "error"
-        //   });
-        // }
+          this.reset();
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Registered user successfully`,
+            color: "success"
+          });
+        } else {
+          this.reset();
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Has ocurred a error`,
+            color: "error"
+          });
+        }
       }, 500);
     },
     reset() {
@@ -240,6 +238,28 @@ export default {
       this.sendingForm = false;
       this.$refs.form.reset();
       this.formValue.country = { state: "", code: "" };
+    },
+    validateUser() {
+      const usr = this.formValue.username;
+      const min = this.configForm.username.min;
+      if (usr && usr !== "" && usr.length >= min) {
+        this.searchingUser = true;
+        setTimeout(() => {
+          if (this.getByUsername(usr)) {
+            this.searchingUser = false;
+            this.userIsRepeat = `${usr} already exists, try another user.`;
+            return;
+          }
+
+          this.userIsRepeat = false;
+          this.searchingUser = false;
+        }, 500);
+      }
+    }
+  },
+  watch: {
+    "formValue.username"(newVal) {
+      this.debouncedValidateUser();
     }
   }
 };
