@@ -9,7 +9,13 @@ export default {
           try {
             console.log('response', response)
             const rsp = [response]
-            rsp.forEach((k, v) => { delete v.simpleWallet })
+            for (let x of rsp) { 
+              delete x.simpleWallet
+              delete x.algo
+              delete x.integrateSSI
+              delete x.dateBirth
+              x['country'] = `${x.country.state}, ${x.country.code}`
+            }
             const qr = await this.$store.dispatch('siriusIDStore/createCredential', rsp);
             return {
               qr,

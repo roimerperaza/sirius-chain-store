@@ -57,7 +57,7 @@ export default {
     },
     async loadSignupQR() {
       if (this.qrSignup === '') {
-        this.qrSignup = await this.$store.dispatch('siriusIDStore/createCredential')
+        // this.qrSignup = await this.$store.dispatch('siriusIDStore/createCredential')
       }
     }
   },

@@ -75,7 +75,7 @@
 
             <!-- Integrate con SSI -->
             <v-col cols="12" class="d-flex justify-center">
-              <v-checkbox v-model="formValue.integrateSSI" :label="`Integrate with Sirius Id`"></v-checkbox>
+              <v-checkbox v-model="formValue.integrateSSI" :label="`Integrate with SiriusID app`"></v-checkbox>
             </v-col>
 
             <!-- Password -->
@@ -147,7 +147,13 @@
       </v-form>
     </template>
 
-    <template>
+    <template v-else>
+      <v-row>
+        <v-col cols="12" sm="10" md="9" lg="8" class="d-flex justify-center mt-10 mx-auto">
+          <v-img :src="qrSignup" max-width="200" max-height="200"></v-img>
+          <span class="ml-5 mt-5 headline font-weight-medium">{{infoQrCode}}</span>
+        </v-col>
+      </v-row>
       <v-row>
         <template v-for="(v, k) in steps">
           <v-col :key="k" cols="8" sm="6" md="4" class="mt-10 mx-auto">
@@ -193,16 +199,19 @@ export default {
       dateBirth: '',
       integrateSSI: false
     },
+    infoQrCode: 'Use the SiriusID app to scan the QR code and create your credential',
     steps: [
       {
         icon: 'smartphone1.png',
         text: 'Open SiriusID app.',
         number: '1'
-      }, {
+      },
+      {
         icon: 'smartphone2.png',
         text: 'Touch the QR code to scan.',
         number: '2'
-      }, {
+      },
+      {
         icon: 'smartphone3.png',
         text: 'Point the camera at the QR code above.',
         number: '3'

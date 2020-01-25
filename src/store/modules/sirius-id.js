@@ -12,9 +12,9 @@ export const siriusIDStore = {
     // instead of mounting getters, mutations, and actions to the root namespace.
     namespaced: true,
     state: {
-        id: 'blockchain-store',
-        name: 'Blockchain Store',
-        description: 'Blockchain store with catapult blockchain',
+        id: 'sirius-chain-store',
+        name: 'Sirius Chain Store',
+        description: 'Store with ProximaX Sirius Chain',
         icon: '',
         documentHash: [],
         // Private key of dApp where created this credential
@@ -24,8 +24,9 @@ export const siriusIDStore = {
     mutations: {},
     actions: {
         async createCredential({commit, state}, data) {
-            console.log(data)
-            const content = new Map(data)
+            console.log('state', state)
+            const x = Object.entries(data[0])
+            const content = new Map(x)
             // Option - to protect this credential from other fake applications
             const authOrigin = Credentials.authCreate(content, state.privateKey);
             const credential = Credentials.create(
