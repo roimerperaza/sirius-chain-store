@@ -1,7 +1,20 @@
 <template >
   <v-app>
+    <!-- DIALOG -->
+    <template v-if="dialog">
+      <full-dialog
+        :config="{name: 'Sirius Chain Store', 'btn': '', color: 'dark'}"
+        :dialog="dialog"
+        @dialog="dialog = $event"
+      >
+        <template slot="body">
+          <auth></auth>
+        </template>
+      </full-dialog>
+    </template>
+
     <!-- Menu -->
-    <menu-item></menu-item>
+    <menu-item @showDialog="dialog = $event"></menu-item>
 
     <!-- Overlay -->
     <v-overlay :value="overlay">
@@ -34,19 +47,28 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: "App",
-  data: () => ({}),
+  name: 'App',
+  data: () => ({
+    dialog: false
+  }),
   components: {
-    "menu-item": () => import("@/components/Menu")
+    auth: () => import('@/components/Auth'),
+    'menu-item': () => import('@/components/Menu'),
+    'full-dialog': () => import('@/components/Dialog')
   },
   computed: {
-    ...mapState(["overlay", "snackbar"]),
-    ...mapGetters("accountStore", ["isLogged"])
+    ...mapState(['overlay', 'snackbar']),
+    ...mapGetters('accountStore', ['isLogged'])
+  },
+  watch: {
+    dialog: function(val) {
+      document.querySelector('html').style.overflow = val ? 'hidden' : null
+    }
   }
-};
+}
 </script>
 
 <style scoped>

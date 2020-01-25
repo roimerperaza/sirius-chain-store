@@ -1,103 +1,80 @@
 <template>
-  <div class="h-100vh">
-    <v-layout class="h-100vh">
-      <v-container fluid class="pb-0 pl-0 pr-0 pt-48">
-        <v-row class="mx-auto h-100porcent">
-          <!-- Carousel -->
-          <v-col
-            cols="12"
-            sm="5"
-            md="4"
-            class="p-0 d-none d-sm-flex d-flex justify-center align-center"
-            id="box-landing-page"
+  <v-layout>
+    <v-container>
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" sm="10" class="mx-autos">
+          <v-tabs
+            v-model="tab"
+            centered
+            icons-and-text
+            background-color="transparent"
+            color="fantasy"
           >
-            <div id="landing-page"></div>
-          </v-col>
+            <v-tabs-slider></v-tabs-slider>
+            <v-tab href="#tab-login">Login</v-tab>
+            <v-tab href="#tab-register" @click="loadSignupQR">Register</v-tab>
+          </v-tabs>
 
-          <!-- FORM -->
-          <v-col cols="12" sm="7" md="8" class="p-0 max-h-col-auth">
-            <v-tabs
-              v-model="tab"
-              centered
-              icons-and-text
-              background-color="transparent"
-              color="fantasy"
-            >
-              <v-tabs-slider></v-tabs-slider>
-              <v-tab href="#tab-login">Login</v-tab>
-              <v-tab href="#tab-register" @click="loadSignupQR">Register</v-tab>
-            </v-tabs>
+          <v-tabs-items v-model="tab">
+            <v-tab-item background-color="transparent" value="tab-login">
+              <v-card flat color="transparent">
+                <div class="d-flex align-center justify-center pt-9">
+                  <v-img :src="qrImageLogin" max-width="200" max-height="200"></v-img>
+                </div>
+              </v-card>
+            </v-tab-item>
 
-            <v-tabs-items v-model="tab">
-              <v-tab-item background-color="transparent" value="tab-login">
-                <v-card flat color="transparent">
-                  <div class="d-flex align-center justify-center pt-9">
-                    <v-img :src="qrImageLogin" max-width="200" max-height="200"></v-img>
-                  </div>
-                </v-card>
-              </v-tab-item>
-
-              <v-tab-item background-color="transparent" value="tab-register">
-                <v-card flat color="transparent">
-                  <div class="d-flex align-center justify-center pt-5">
-                    <!-- <v-img :src="qrImageSignp" max-width="200" max-height="200"></v-img> -->
-                    <sign-up class="mr-8 ml-8"></sign-up>
-                  </div>
-                </v-card>
-              </v-tab-item>
-            </v-tabs-items>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-layout>
-  </div>
+            <v-tab-item background-color="transparent" value="tab-register">
+              <sign-up></sign-up>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
 export default {
-  inject: ["theme"],
+  inject: ['theme'],
   data: () => ({
-    nameApp: "",
+    nameApp: '',
     showArrows: false,
     tab: null,
-    qrLogin: "",
-    qrSignup: ""
+    qrLogin: '',
+    qrSignup: ''
   }),
   components: {
-    "sign-up": () => import("@/components/Signup")
+    'sign-up': () => import('@/components/Signup')
   },
   methods: {
     changeTheme() {
-      this.$vuetify.theme.isDark = !this.$vuetify.theme.isDark;
+      this.$vuetify.theme.isDark = !this.$vuetify.theme.isDark
       const theme = this.$vuetify.theme.isDark
         ? this.$vuetify.theme.themes.dark
-        : this.$vuetify.theme.themes.light;
-      this.$vuetify.theme.currentTheme = theme;
+        : this.$vuetify.theme.themes.light
+      this.$vuetify.theme.currentTheme = theme
     },
     async loadSignupQR() {
-      if (this.qrSignup === "") {
-        this.qrSignup = await this.$store.dispatch(
-          "siriusIDStore/createCredential"
-        );
+      if (this.qrSignup === '') {
+        this.qrSignup = await this.$store.dispatch('siriusIDStore/createCredential')
       }
     }
   },
   computed: {
     qrImageLogin() {
-      return this.qrLogin !== "" ? "" + this.qrLogin : "";
+      return this.qrLogin !== '' ? '' + this.qrLogin : ''
     },
     qrImageSignp() {
-      return this.qrSignup !== "" ? "" + this.qrSignup : "";
+      return this.qrSignup !== '' ? '' + this.qrSignup : ''
     }
   },
   async beforeMount() {
-    this.nameApp = this.$store.getters.nameApp;
-    this.qrLogin = await this.$store.dispatch(
-      "siriusIDStore/createLoginMessage"
-    );
-    this.$store.dispatch("siriusIDStore/initWebsocket");
+    this.nameApp = this.$store.getters.nameApp
+    this.qrLogin = await this.$store.dispatch('siriusIDStore/createLoginMessage')
+    this.$store.dispatch('siriusIDStore/initWebsocket')
   }
-};
+}
 </script>
 
 <style scoped>
@@ -106,13 +83,13 @@ export default {
 }
 
 #landing-page {
-  background-image: url("../assets/shop-online.png");
+  background-image: url('../assets/shop-online.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
-  height: 350px;
-  width: 350px;
+  height: 250px;
+  width: 250px;
 }
 
 .pointer {

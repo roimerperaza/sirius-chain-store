@@ -1,20 +1,7 @@
 <template>
   <div>
-    <!-- DIALOG -->
-    <template v-if="dialog">
-      <full-dialog
-        :config="{name: 'Sirius Chain Store', 'btn': '', color: 'dark'}"
-        :dialog="dialog"
-        @dialog="dialog = $event"
-      >
-        <template slot="body">
-          <auth></auth>
-        </template>
-      </full-dialog>
-    </template>
-
     <!-- Navigation panel -->
-    <v-navigation-drawer dark v-model="drawer" app mobile-break-point="1024">
+    <v-navigation-drawer temporary dark v-model="drawer" app mobile-break-point="1024">
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
@@ -87,7 +74,6 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
-    dialog: false,
     drawer: false,
     links: [
       { title: "Home", icon: "mdi-view-dashboard", route: "/home" },
@@ -116,7 +102,7 @@ export default {
     action(type) {
       switch (type) {
         case "authDialog":
-          this.dialog = true;
+          this.$emit('showDialog', true)
           break;
         default:
           break;
@@ -126,10 +112,6 @@ export default {
       this.LOGOUT(null);
       this.$router.push("/auth").catch(e => {});
     }
-  },
-  components: {
-    "full-dialog": () => import("@/components/Dialog"),
-    auth: () => import("@/components/Auth")
   },
   computed: {
     ...mapGetters(["pseudonymApp"]),

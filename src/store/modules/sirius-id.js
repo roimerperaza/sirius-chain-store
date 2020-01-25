@@ -11,36 +11,34 @@ export const siriusIDStore = {
     // This makes your getters, mutations, and actions accessed by, eg: 'myModule/myModularizedNumber' 
     // instead of mounting getters, mutations, and actions to the root namespace.
     namespaced: true,
-    state: {},
+    state: {
+        id: 'blockchain-store',
+        name: 'Blockchain Store',
+        description: 'Blockchain store with catapult blockchain',
+        icon: '',
+        documentHash: [],
+        // Private key of dApp where created this credential
+        privateKey: "3401374277C42290570A8B88B86BCFCC190DF7808B4F14079F798B0F7D66B9EE"
+    },
     getters: {},
     mutations: {},
     actions: {
-        async createCredential({}, data) {
+        async createCredential({commit, state}, data) {
             console.log(data)
-            let content = new Map([
-                ['hola', 'mundo']
-            ])
-            let id = 'blockchain-store';
-            let name = 'Blockchain Store';
-            let description = 'Blockchain store with catapult blockchain';
-            let icon = '';
-            let documentHash = [];
-
-            // Private key of dApp where created this credential
-            let privateKey = "3401374277C42290570A8B88B86BCFCC190DF7808B4F14079F798B0F7D66B9EE";
+            const content = new Map(data)
             // Option - to protect this credential from other fake applications
-            let authOrigin = Credentials.authCreate(content, privateKey);
+            const authOrigin = Credentials.authCreate(content, state.privateKey);
             const credential = Credentials.create(
-                id,
-                name,
-                description,
-                icon,
-                documentHash,
+                state.id,
+                state.name,
+                state.description,
+                state.icon,
+                state.documentHash,
                 content,
                 authOrigin
             );
 
-            let message = CredentialRequestMessage.create(credential);
+            const message = CredentialRequestMessage.create(credential);
             // Using SiriusID to scan this message and store this credential
             return await message.generateQR()
         },

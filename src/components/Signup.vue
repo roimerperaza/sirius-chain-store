@@ -1,246 +1,311 @@
 <template>
   <div>
-    <v-form v-model="valid" ref="form">
-      <v-container>
-        <v-row>
-          <!-- Name -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              color="fantasy"
-              v-model.trim="formValue.name"
-              required
-              :minlength="configForm.name.min"
-              :maxlength="configForm.name.max"
-              :counter="configForm.name.max"
-              :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max, configForm.generalRules.notAllowSpaces]"
-              :label="configForm.name.label"
-              @keyup="formValue.name = removeSpaces(formValue.name)"
-            ></v-text-field>
-          </v-col>
+    <template v-if="qrSignup === ''">
+      <v-form v-model="valid" ref="form">
+        <v-container>
+          <v-row>
+            <!-- Name -->
+            <v-col cols="12" sm="6">
+              <v-text-field
+                color="fantasy"
+                v-model.trim="formValue.name"
+                required
+                :minlength="configForm.name.min"
+                :maxlength="configForm.name.max"
+                :counter="configForm.name.max"
+                :rules="[configForm.name.rules.required, configForm.name.rules.min, configForm.name.rules.max, configForm.generalRules.notAllowSpaces]"
+                :label="configForm.name.label"
+                @keyup="formValue.name = removeSpaces(formValue.name)"
+              ></v-text-field>
+            </v-col>
 
-          <!-- Lastname -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              color="fantasy"
-              v-model.trim="formValue.lastname"
-              :minlength="configForm.lastname.min"
-              :maxlength="configForm.lastname.max"
-              :counter="configForm.lastname.max"
-              :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max, configForm.generalRules.notAllowSpaces]"
-              :label="configForm.lastname.label"
-              @keyup="formValue.lastname = removeSpaces(formValue.lastname)"
-            ></v-text-field>
-          </v-col>
+            <!-- Lastname -->
+            <v-col cols="12" sm="6">
+              <v-text-field
+                color="fantasy"
+                v-model.trim="formValue.lastname"
+                :minlength="configForm.lastname.min"
+                :maxlength="configForm.lastname.max"
+                :counter="configForm.lastname.max"
+                :rules="[configForm.lastname.rules.required, configForm.lastname.rules.min, configForm.lastname.rules.max, configForm.generalRules.notAllowSpaces]"
+                :label="configForm.lastname.label"
+                @keyup="formValue.lastname = removeSpaces(formValue.lastname)"
+              ></v-text-field>
+            </v-col>
 
-          <!-- Username -->
-          <!-- <v-col cols="12" md="6" v-if="!actionUpdate">
-            <v-text-field
-              color="fantasy"
-              v-model.trim="formValue.username"
-              :loading="searchingUser"
-              :disabled="searchingUser"
-              :minlength="configForm.username.min"
-              :maxlength="configForm.username.max"
-              :counter="configForm.username.max"
-              :rules="[
+            <!-- Username -->
+            <v-col cols="12" sm="6" v-if="!actionUpdate">
+              <v-text-field
+                color="fantasy"
+                v-model.trim="formValue.username"
+                :loading="searchingUser"
+                :disabled="searchingUser"
+                :minlength="configForm.username.min"
+                :maxlength="configForm.username.max"
+                :counter="configForm.username.max"
+                :rules="[
                   configForm.username.rules.required, 
                   configForm.username.rules.min, 
                   configForm.username.rules.max, 
                   configForm.generalRules.notAllowSpaces,
                   userIsRepeat
                 ]"
-              :label="configForm.username.label"
-              @keyup="formValue.username = removeSpaces(formValue.username)"
-            ></v-text-field>
-          </v-col>-->
+                :label="configForm.username.label"
+                @keyup="formValue.username = removeSpaces(formValue.username)"
+              ></v-text-field>
+            </v-col>
 
-          <!-- Email -->
-          <v-col cols="12" md="6" v-if="actionUpdate">
-            <v-text-field
-              color="fantasy"
-              v-model.trim="formValue.email"
-              :maxlength="configForm.email.max"
-              :counter="configForm.email.max"
-              :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid, configForm.generalRules.notAllowSpaces]"
-              :label="configForm.email.label"
-              @keyup="formValue.email = removeSpaces(formValue.email)"
-            ></v-text-field>
-          </v-col>
+            <!-- Email -->
+            <v-col cols="12" sm="6" v-if="actionUpdate">
+              <v-text-field
+                color="fantasy"
+                v-model.trim="formValue.email"
+                :maxlength="configForm.email.max"
+                :counter="configForm.email.max"
+                :rules="[configForm.email.rules.required, configForm.email.rules.max, configForm.email.rules.isValid, configForm.generalRules.notAllowSpaces]"
+                :label="configForm.email.label"
+                @keyup="formValue.email = removeSpaces(formValue.email)"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="12" md="6" v-if="actionUpdate">
-            <country :countrySelected="formValue.country" v-model="formValue.country"></country>
-          </v-col>
+            <!-- Country -->
+            <v-col cols="12" sm="6">
+              <country :countrySelected="formValue.country" v-model="formValue.country"></country>
+            </v-col>
 
-          <!-- Password -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              color="fantasy"
-              v-model="formValue.password"
-              :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
-              :minlength="configForm.password.min"
-              :maxlength="configForm.password.max"
-              :counter="configForm.password.max"
-              :rules="[
+            <!-- Integrate con SSI -->
+            <v-col cols="12" class="d-flex justify-center">
+              <v-checkbox v-model="formValue.integrateSSI" :label="`Integrate with Sirius Id`"></v-checkbox>
+            </v-col>
+
+            <!-- Password -->
+            <v-col cols="12" sm="6" class="pt-0">
+              <v-text-field
+                color="fantasy"
+                v-model="formValue.password"
+                :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                :minlength="configForm.password.min"
+                :maxlength="configForm.password.max"
+                :counter="configForm.password.max"
+                :rules="[
                   configForm.password.rules.required, 
                   configForm.password.rules.min, 
                   configForm.password.rules.max
                 ]"
-              :label="configForm.password.label"
-              :type="configForm.password.show ? 'text' : 'password'"
-              name="password"
-              hint
-              @click:append="configForm.password.show = !configForm.password.show"
-            ></v-text-field>
-          </v-col>
+                :label="configForm.password.label"
+                :type="configForm.password.show ? 'text' : 'password'"
+                name="password"
+                hint
+                @click:append="configForm.password.show = !configForm.password.show"
+              ></v-text-field>
+            </v-col>
 
-          <!-- Confirm Password -->
-          <v-col cols="12" md="6" v-if="!actionUpdate">
-            <v-text-field
-              color="fantasy"
-              name="confirmPassword"
-              label="Confirm Password"
-              hint="Confirm Password"
-              v-model="formValue.confirmPassword"
-              :append-icon="configForm.password.showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
-              :minlength="configForm.password.min"
-              :maxlength="configForm.password.max"
-              :counter="configForm.password.max"
-              :rules="[
+            <!-- Confirm Password -->
+            <v-col cols="12" sm="6" class="pt-0" v-if="!actionUpdate">
+              <v-text-field
+                color="fantasy"
+                name="confirmPassword"
+                label="Confirm Password"
+                hint="Confirm Password"
+                v-model="formValue.confirmPassword"
+                :append-icon="configForm.password.showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                :minlength="configForm.password.min"
+                :maxlength="configForm.password.max"
+                :counter="configForm.password.max"
+                :rules="[
                   configForm.password.rules.required,
                   configForm.password.rules.min,
                   configForm.password.rules.max,
                   isMatch(formValue.password, formValue.confirmPassword, 'Password')
                 ]"
-              :type="configForm.password.showConfirm ? 'text' : 'password'"
-              :disabled="disabledConfirmPassword"
-              @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
-            ></v-text-field>
-          </v-col>
-        </v-row>
+                :type="configForm.password.showConfirm ? 'text' : 'password'"
+                :disabled="disabledConfirmPassword"
+                @click:append="configForm.password.showConfirm = !configForm.password.showConfirm"
+              ></v-text-field>
+            </v-col>
+          </v-row>
 
-        <!-- Buttons -->
-        <v-row>
-          <!-- Button Cancel -->
-          <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-end">
-            <v-btn :disabled="sendingForm" @click="reset" outlined color="fantasy">CANCEL</v-btn>
-          </v-col>
+          <!-- Buttons -->
+          <v-row>
+            <!-- Button Cancel -->
+            <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-end">
+              <v-btn :disabled="sendingForm" @click="reset" outlined color="fantasy">CANCEL</v-btn>
+            </v-col>
 
-          <!-- Button Register -->
-          <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
-            <v-btn
-              :loading="sendingForm"
-              :disabled="!valid || sendingForm || searchingUser"
-              outlined
-              color="fantasy"
-              @click="submit"
-            >REGISTER</v-btn>
+            <!-- Button Register -->
+            <v-col cols="8" sm="6" class="mx-auto d-flex justify-center justify-sm-start">
+              <v-btn
+                :loading="sendingForm"
+                :disabled="!valid || sendingForm || searchingUser"
+                outlined
+                color="fantasy"
+                @click="submit"
+              >{{actionLabel()}}</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
+    </template>
+
+    <template>
+      <v-row>
+        <template v-for="(v, k) in steps">
+          <v-col :key="k" cols="8" sm="6" md="4" class="mt-10 mx-auto">
+            <div class="d-flex align-center justify-center">
+              <v-badge bordered color="error" icon="mdi-lock" overlap>
+                <v-btn class="mx-2" fab dark small color="primary">{{v.number}}</v-btn>
+              </v-badge>
+              <v-img :src="require(`@/assets/store/${v.icon}`)" max-width="100" max-height="100"></v-img>
+            </div>
+            <div class="d-flex align-center justify-center">
+              <span class="text-center">{{v.text}}</span>
+            </div>
           </v-col>
-        </v-row>
-      </v-container>
-    </v-form>
+        </template>
+      </v-row>
+    </template>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import generalMixins from "../mixins/general";
-import accountMixin from "../mixins/account";
+import { mapMutations } from 'vuex'
+import generalMixins from '../mixins/general'
+import accountMixin from '../mixins/account'
 
 export default {
   mixins: [generalMixins, accountMixin],
-  props: ["actionUpdate"],
+  props: ['actionUpdate'],
   data: () => ({
     configForm: null,
     sendingForm: false,
     valid: false,
     searchingUser: false,
     userIsRepeat: false,
+    qrSignup: '',
     formValue: {
-      name: "",
-      lastname: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-      email: "",
-      country: { state: "", code: "" },
-      dateBirth: ""
-    }
+      name: '',
+      lastname: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      country: { state: '', code: '' },
+      dateBirth: '',
+      integrateSSI: false
+    },
+    steps: [
+      {
+        icon: 'smartphone1.png',
+        text: 'Open SiriusID app.',
+        number: '1'
+      }, {
+        icon: 'smartphone2.png',
+        text: 'Touch the QR code to scan.',
+        number: '2'
+      }, {
+        icon: 'smartphone3.png',
+        text: 'Point the camera at the QR code above.',
+        number: '3'
+      }
+    ]
   }),
   beforeMount() {
-    this.configForm = this.getConfigForm();
+    this.configForm = this.getConfigForm()
+    this.debouncedValidateUser = this.lodash.debounce(this.validateUser, 500)
     if (this.actionUpdate) {
-      const userData = this.$store.getters["accountStore/userData"];
-      this.formValue.name = userData.name;
-      this.formValue.lastname = userData.lastname;
-      this.formValue.username = userData.username;
-      this.formValue.email = userData.email;
+      const userData = this.$store.getters['accountStore/userData']
+      this.formValue.name = userData.name
+      this.formValue.lastname = userData.lastname
+      this.formValue.username = userData.username
+      this.formValue.email = userData.email
       this.formValue.country = {
         state: userData.country.state,
         code: userData.country.code
-      };
-      this.formValue.dateBirth = userData.dateBirth;
+      }
+      this.formValue.dateBirth = userData.dateBirth
     }
   },
   components: {
-    country: () => import("@/components/Country")
+    country: () => import('@/components/Country')
   },
   computed: {
     disabledConfirmPassword() {
-      const password = this.formValue.password;
+      const password = this.formValue.password
       if (password) {
-        if (password === "" || password.length < this.configForm.password.min) {
-          this.formValue.confirmPassword = "";
-          return true;
+        if (password === '' || password.length < this.configForm.password.min) {
+          this.formValue.confirmPassword = ''
+          return true
         }
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     }
   },
   methods: {
-    ...mapMutations("accountStore", ["UPDATE_DATA_USER"]),
-    ...mapMutations(["SHOW_SNACKBAR", "SHOW_LOADING"]),
+    ...mapMutations('accountStore', ['UPDATE_DATA_USER']),
+    ...mapMutations(['SHOW_SNACKBAR', 'SHOW_LOADING']),
+    actionLabel() {
+      return this.actionUpdate ? 'UPDATE' : 'REGISTER'
+    },
     submit() {
-      this.sendingForm = true;
-      this.SHOW_LOADING(true);
+      this.sendingForm = true
+      this.SHOW_LOADING(true)
       setTimeout(async () => {
-        console.log(this.formValue)
-        const credentialData = this.createCredential(this.formValue);
-        console.log(credentialData)
-        // const qrSignup = await this.$store.dispatch("siriusIDStore/createCredential", {amount: 10});
-
-        // console.log(qrSignup)
-        // const save = this.saveUser(this.formValue, this.actionUpdate);
-        // this.SHOW_LOADING(false);
-        // if (save) {
-        //   if (this.actionUpdate) {
-        //       this.UPDATE_DATA_USER(save)
-        //   }
-
-        //   this.reset();
-        //   this.SHOW_SNACKBAR({
-        //     snackbar: true,
-        //     text: `Registered user successfully`,
-        //     color: "success"
-        //   });
-        // } else {
-        //   this.reset();
-        //   this.SHOW_SNACKBAR({
-        //     snackbar: true,
-        //     text: `Has ocurred a error`,
-        //     color: "error"
-        //   });
-        // }
-      }, 500);
+        console.log('this.formValue', this.formValue)
+        const create = await this.createCredential(this.formValue)
+        this.SHOW_LOADING(false)
+        if (create) {
+          this.reset()
+          if (create.qr) {
+            console.log(create.qr)
+            this.qrSignup = create.qr
+          } else {
+            this.SHOW_SNACKBAR({
+              snackbar: true,
+              text: `Registered user successfully`,
+              color: 'success'
+            })
+          }
+        } else {
+          this.reset()
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Has ocurred a error`,
+            color: 'error'
+          })
+        }
+      }, 500)
     },
     reset() {
-      this.userIsRepeat = false;
-      this.searchingUser = false;
-      this.sendingForm = false;
-      this.$refs.form.reset();
-      this.formValue.country = { state: "", code: "" };
+      this.userIsRepeat = false
+      this.searchingUser = false
+      this.sendingForm = false
+      this.$refs.form.reset()
+      this.formValue.country = { state: '', code: '' }
+    },
+    validateUser() {
+      const usr = this.formValue.username
+      const min = this.configForm.username.min
+      if (usr && usr !== '' && usr.length >= min) {
+        this.searchingUser = true
+        setTimeout(() => {
+          if (this.getByUsername(usr)) {
+            this.searchingUser = false
+            this.userIsRepeat = `${usr} already exists, try another user.`
+            return
+          }
+
+          this.userIsRepeat = false
+          this.searchingUser = false
+        }, 500)
+      }
+    }
+  },
+  watch: {
+    'formValue.username'(newVal) {
+      this.debouncedValidateUser()
     }
   }
-};
+}
 </script>

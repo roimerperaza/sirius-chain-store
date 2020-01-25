@@ -11,6 +11,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
+import { GeneralService } from './services/general'
 import { BlockchainProvider } from './services/blockchain-provider'
 import VueClipboard from 'vue-clipboard2'
 
@@ -37,6 +38,7 @@ Vue.directive('quantity', {
 
 // Define prototype
 Vue.prototype.$storage = new StorageService(localStorage)
+Vue.prototype.$generalService = new GeneralService()
 
 const configIntegration = async function () {
   try {
