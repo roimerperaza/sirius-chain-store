@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="qrSignup === ''">
+    <template v-if="!showQrSignup">
       <v-form v-model="valid" ref="form">
         <v-container>
           <v-row>
@@ -153,6 +153,21 @@
           <v-img :src="qrSignup" max-width="200" max-height="200"></v-img>
           <span class="ml-5 mt-5 headline font-weight-medium">{{infoQrCode}}</span>
         </v-col>
+        <!-- Integrate con SSI -->
+        <v-col cols="12" class="d-flex justify-center">
+          <v-checkbox
+            v-model="formValue.credentialCreated"
+            :label="`I created my credential in SiriusID app`"
+          ></v-checkbox>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-center">
+          <v-btn
+            :disabled="!formValue.credentialCreated"
+            outlined
+            color="fantasy"
+            @click="continueAction"
+          >CONTINUE</v-btn>
+        </v-col>
       </v-row>
       <v-row>
         <template v-for="(v, k) in steps">
@@ -188,6 +203,8 @@ export default {
     searchingUser: false,
     userIsRepeat: false,
     qrSignup: '',
+    showQrSignup: false,
+    credentialCreated: false,
     formValue: {
       name: '',
       lastname: '',
@@ -257,19 +274,25 @@ export default {
     actionLabel() {
       return this.actionUpdate ? 'UPDATE' : 'REGISTER'
     },
+    continueAction() {
+      this.qrSignup = ''
+      this.formValue.integrateSSI = false
+      this.submit()
+    },
     submit() {
       this.sendingForm = true
       this.SHOW_LOADING(true)
       setTimeout(async () => {
-        console.log('this.formValue', this.formValue)
         const create = await this.createCredential(this.formValue)
-        this.SHOW_LOADING(false)
         if (create) {
-          this.reset()
           if (create.qr) {
-            console.log(create.qr)
+            this.showQrSignup = true
             this.qrSignup = create.qr
+            this.SHOW_LOADING(false)
           } else {
+            this.reset()
+            this.showQrSignup = false
+            this.SHOW_LOADING(false)
             this.SHOW_SNACKBAR({
               snackbar: true,
               text: `Registered user successfully`,
@@ -278,6 +301,8 @@ export default {
           }
         } else {
           this.reset()
+          this.showQrSignup = false
+          this.SHOW_LOADING(false)
           this.SHOW_SNACKBAR({
             snackbar: true,
             text: `Has ocurred a error`,
@@ -290,8 +315,18 @@ export default {
       this.userIsRepeat = false
       this.searchingUser = false
       this.sendingForm = false
-      this.$refs.form.reset()
-      this.formValue.country = { state: '', code: '' }
+      if (this.$refs.form) { this.$refs.form.reset() }
+      this.formValue = {
+        name: '',
+        lastname: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
+        email: '',
+        country: { state: '', code: '' },
+        dateBirth: '',
+        integrateSSI: false
+      }
     },
     validateUser() {
       const usr = this.formValue.username
