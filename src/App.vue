@@ -48,9 +48,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import webSocket from './mixins/WebSocket'
 
 export default {
   name: 'App',
+  mixins: [webSocket],
   data: () => ({
     dialog: false
   }),
@@ -74,6 +76,10 @@ export default {
 <style scoped>
 .cursor-p {
   cursor: pointer;
+}
+
+.v-overlay {
+  z-index: 5550 !important;
 }
 /*
 .fade-enter-active,

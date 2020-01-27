@@ -9,7 +9,7 @@
           <v-toolbar-title>{{config.name}}</v-toolbar-title>
         </v-toolbar>
         <v-list three-line subheader>
-          <slot name="body" id="hiiii"></slot>
+          <slot name="body"></slot>
         </v-list>
       </v-card>
     </v-dialog>

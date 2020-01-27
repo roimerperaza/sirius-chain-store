@@ -148,42 +148,25 @@
     </template>
 
     <template v-else>
-      <v-row>
-        <v-col cols="12" sm="10" md="9" lg="8" class="d-flex justify-center mt-10 mx-auto">
-          <v-img :src="qrSignup" max-width="200" max-height="200"></v-img>
-          <span class="ml-5 mt-5 headline font-weight-medium">{{infoQrCode}}</span>
-        </v-col>
-        <!-- Integrate con SSI -->
-        <v-col cols="12" class="d-flex justify-center">
-          <v-checkbox
-            v-model="formValue.credentialCreated"
-            :label="`I created my credential in SiriusID app`"
-          ></v-checkbox>
-        </v-col>
-        <v-col cols="12" class="d-flex justify-center">
-          <v-btn
-            :disabled="!formValue.credentialCreated"
-            outlined
-            color="fantasy"
-            @click="continueAction"
-          >CONTINUE</v-btn>
-        </v-col>
-      </v-row>
-      <v-row>
-        <template v-for="(v, k) in steps">
-          <v-col :key="k" cols="8" sm="6" md="4" class="mt-10 mx-auto">
-            <div class="d-flex align-center justify-center">
-              <v-badge bordered color="error" icon="mdi-lock" overlap>
-                <v-btn class="mx-2" fab dark small color="primary">{{v.number}}</v-btn>
-              </v-badge>
-              <v-img :src="require(`@/assets/store/${v.icon}`)" max-width="100" max-height="100"></v-img>
-            </div>
-            <div class="d-flex align-center justify-center">
-              <span class="text-center">{{v.text}}</span>
-            </div>
+      <scan-qr-code :qrCode="qrSignup" :infoQrCode="infoQrCode">
+        <template slot="body">
+          <v-col cols="12" class="d-flex justify-center mb-0 pb-0">
+            <v-checkbox
+              class="mb-0"
+              v-model="formValue.credentialCreated"
+              :label="`I created my credential in SiriusID app`"
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-center mt-0 pt-0">
+            <v-btn
+              :disabled="!formValue.credentialCreated"
+              outlined
+              color="fantasy"
+              @click="continueAction"
+            >CONTINUE</v-btn>
           </v-col>
         </template>
-      </v-row>
+      </scan-qr-code>
     </template>
   </div>
 </template>
@@ -216,24 +199,7 @@ export default {
       dateBirth: '',
       integrateSSI: false
     },
-    infoQrCode: 'Use the SiriusID app to scan the QR code and create your credential',
-    steps: [
-      {
-        icon: 'smartphone1.png',
-        text: 'Open SiriusID app.',
-        number: '1'
-      },
-      {
-        icon: 'smartphone2.png',
-        text: 'Touch the QR code to scan.',
-        number: '2'
-      },
-      {
-        icon: 'smartphone3.png',
-        text: 'Point the camera at the QR code above.',
-        number: '3'
-      }
-    ]
+    infoQrCode: 'Use the SiriusID app to scan the QR code and create your credential'
   }),
   beforeMount() {
     this.configForm = this.getConfigForm()
@@ -252,7 +218,8 @@ export default {
     }
   },
   components: {
-    country: () => import('@/components/Country')
+    country: () => import('@/components/Country'),
+    'scan-qr-code': () => import('@/components/ScanQRCode')
   },
   computed: {
     disabledConfirmPassword() {
@@ -275,15 +242,34 @@ export default {
       return this.actionUpdate ? 'UPDATE' : 'REGISTER'
     },
     continueAction() {
-      this.qrSignup = ''
-      this.formValue.integrateSSI = false
-      this.submit()
+      this.sendingForm = true
+      this.SHOW_LOADING(true)
+      setTimeout(async () => {
+        this.qrSignup = ''
+        const create = await this.createCredential(this.formValue, false)
+        this.reset()
+        this.showQrSignup = false
+        this.SHOW_LOADING(false)
+        if (create) {
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Registered user successfully`,
+            color: 'success'
+          })
+        } else {
+          this.SHOW_SNACKBAR({
+            snackbar: true,
+            text: `Has ocurred a error`,
+            color: 'error'
+          })
+        }
+      }, 500)
     },
     submit() {
       this.sendingForm = true
       this.SHOW_LOADING(true)
       setTimeout(async () => {
-        const create = await this.createCredential(this.formValue)
+        const create = await this.createCredential(this.formValue, this.formValue.integrateSSI)
         if (create) {
           if (create.qr) {
             this.showQrSignup = true
@@ -315,7 +301,9 @@ export default {
       this.userIsRepeat = false
       this.searchingUser = false
       this.sendingForm = false
-      if (this.$refs.form) { this.$refs.form.reset() }
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+      }
       this.formValue = {
         name: '',
         lastname: '',

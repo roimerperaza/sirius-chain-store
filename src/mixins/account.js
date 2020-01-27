@@ -2,35 +2,32 @@ import generalMixins from '../mixins/general'
 export default {
   mixins: [generalMixins],
   methods: {
-    async createCredential(data) {
-      const response = this.saveUser(data)
-      if (response) {
-        if (data.integrateSSI) {
-          try {
-            console.log('response', response)
-            const rsp = [response]
-            for (let x of rsp) { 
-              delete x.simpleWallet
-              delete x.algo
-              delete x.integrateSSI
-              delete x.dateBirth
-              x['country'] = `${x.country.state}, ${x.country.code}`
-            }
-            const qr = await this.$store.dispatch('siriusIDStore/createCredential', rsp);
-            return {
-              qr,
-              response
-            }
-          } catch (error) {
-            console.log(error)
-            return null
+    async createCredential(data, onlyBuildQR) {
+      const response = this.saveUser(data, false, onlyBuildQR)
+      if (response && onlyBuildQR) {
+        try {
+          const rsp = [response]
+          for (let x of rsp) {
+            delete x.simpleWallet
+            delete x.algo
+            delete x.integrateSSI
+            delete x.dateBirth
+            x['country'] = `${x.country.state}, ${x.country.code}`
           }
+          const qr = await this.$store.dispatch('siriusIDStore/createCredential', rsp);
+          return {
+            qr,
+            response
+          }
+        } catch (error) {
+          console.log(error)
+          return null
         }
       }
 
       return response
     },
-    buildAccount(data, users) {
+    buildAccount(data, users, onlyBuildQR) {
       const toSave = {
         username: data.username,
         name: data.name,
@@ -43,7 +40,7 @@ export default {
       }
 
       toSave['simpleWallet'] = this.$blockchainProvider.createAccountSimple(data.username, data.password)
-      if (!data.integrateSSI) {
+      if (!onlyBuildQR) {
         this.registerUser(toSave, users)
       }
 
@@ -91,12 +88,12 @@ export default {
 
       return JSON.parse(users)
     },
-    saveUser(data, update) {
+    saveUser(data, update, onlyBuildQR) {
       try {
         const users = this.getUsers()
         const currentUser = this.getByUsername(data.username)
         if (!update && !currentUser) {
-          const response = this.buildAccount(data, users)
+          const response = this.buildAccount(data, users, onlyBuildQR)
           return response
         } else if (update && currentUser) {
           const response = this.update(data, users, currentUser)

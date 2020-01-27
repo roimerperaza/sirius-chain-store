@@ -12,18 +12,16 @@
           >
             <v-tabs-slider></v-tabs-slider>
             <v-tab href="#tab-login">Login</v-tab>
-            <v-tab href="#tab-register" @click="loadSignupQR">Register</v-tab>
+            <v-tab href="#tab-register">Register</v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="tab">
+            <!-- Tab Login -->
             <v-tab-item background-color="transparent" value="tab-login">
-              <v-card flat color="transparent">
-                <div class="d-flex align-center justify-center pt-9">
-                  <v-img :src="qrImageLogin" max-width="200" max-height="200"></v-img>
-                </div>
-              </v-card>
+              <login></login>
             </v-tab-item>
 
+            <!-- Tab Signup -->
             <v-tab-item background-color="transparent" value="tab-register">
               <sign-up></sign-up>
             </v-tab-item>
@@ -41,10 +39,10 @@ export default {
     nameApp: '',
     showArrows: false,
     tab: null,
-    qrLogin: '',
-    qrSignup: ''
+    qrLogin: ''
   }),
   components: {
+    'login': () => import('@/components/Login'),
     'sign-up': () => import('@/components/Signup')
   },
   methods: {
@@ -54,25 +52,16 @@ export default {
         ? this.$vuetify.theme.themes.dark
         : this.$vuetify.theme.themes.light
       this.$vuetify.theme.currentTheme = theme
-    },
-    async loadSignupQR() {
-      if (this.qrSignup === '') {
-        // this.qrSignup = await this.$store.dispatch('siriusIDStore/createCredential')
-      }
     }
   },
   computed: {
     qrImageLogin() {
       return this.qrLogin !== '' ? '' + this.qrLogin : ''
-    },
-    qrImageSignp() {
-      return this.qrSignup !== '' ? '' + this.qrSignup : ''
     }
   },
   async beforeMount() {
     this.nameApp = this.$store.getters.nameApp
-    this.qrLogin = await this.$store.dispatch('siriusIDStore/createLoginMessage')
-    this.$store.dispatch('siriusIDStore/initWebsocket')
+    // this.qrLogin = await this.$store.dispatch('siriusIDStore/createLoginMessage')
   }
 }
 </script>

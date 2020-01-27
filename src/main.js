@@ -4,6 +4,8 @@ import VueAxios from 'vue-axios'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 import VueLodash from 'vue-lodash'
+import VueClipboard from 'vue-clipboard2'
+
 
 import './assets/css/style.css'
 import App from './App.vue'
@@ -13,7 +15,6 @@ import vuetify from './plugins/vuetify';
 import { StorageService } from './services/storage'
 import { GeneralService } from './services/general'
 import { BlockchainProvider } from './services/blockchain-provider'
-import VueClipboard from 'vue-clipboard2'
 
 
 const options = { name: 'lodash' } // customize the way you want to call it

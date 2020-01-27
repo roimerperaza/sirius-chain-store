@@ -5,7 +5,7 @@ import {
 } from 'siriusid-sdk';
 import {
     WebSocketProvider
-} from '../../services/WebSocket';
+} from '../../mixins/WebSocket';
 
 export const siriusIDStore = {
     // This makes your getters, mutations, and actions accessed by, eg: 'myModule/myModularizedNumber' 
@@ -23,7 +23,7 @@ export const siriusIDStore = {
     getters: {},
     mutations: {},
     actions: {
-        async createCredential({commit, state}, data) {
+        async createCredential({state}, data) {
             console.log('state', state)
             const x = Object.entries(data[0])
             const content = new Map(x)
