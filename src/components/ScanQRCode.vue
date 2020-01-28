@@ -1,14 +1,19 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" sm="10" md="9" lg="8" class="d-flex justify-center mt-10 mx-auto">
-        <v-img :src="qrCode" max-width="200" max-height="200"></v-img>
-        <span class="ml-5 mt-5 title font-weight-medium">{{infoQrCode}}</span>
+      <v-col cols="12" :lg="sizeLg" class="mx-auto">
+        <v-row>
+          <v-col cols="12" sm="5" md="4" lg="3">
+            <div class="d-flex justify-center align-center">
+              <v-img :src="qrCode" max-width="200" max-height="200"></v-img>
+            </div>
+          </v-col>
+          <v-col cols="9" sm="7" md="8" lg="9" class="pt-0 mx-auto title font-weight-medium text-center d-flex align-center">
+            <slot name="body"></slot>
+          </v-col>
+        </v-row>
       </v-col>
-      <!-- Integrate con SSI -->
-      <slot name="body"></slot>
     </v-row>
-    <!-- Steps -->
     <v-row>
       <template v-for="(v, k) in steps">
         <v-col :key="k" cols="8" sm="6" md="4" class="mt-10 mx-auto">
@@ -29,7 +34,7 @@
 
 <script>
 export default {
-  props: ['qrCode', 'infoQrCode'],
+  props: ['qrCode', 'sizeLg'],
   data: () => ({
     steps: [
       {

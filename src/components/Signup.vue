@@ -148,23 +148,25 @@
     </template>
 
     <template v-else>
-      <scan-qr-code :qrCode="qrSignup" :infoQrCode="infoQrCode">
+      <scan-qr-code :qrCode="qrSignup" :sizeLg="'7'">
         <template slot="body">
-          <v-col cols="12" class="d-flex justify-center mb-0 pb-0">
-            <v-checkbox
-              class="mb-0"
-              v-model="formValue.credentialCreated"
-              :label="`I created my credential in SiriusID app`"
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="12" class="d-flex justify-center mt-0 pt-0">
-            <v-btn
-              :disabled="!formValue.credentialCreated"
-              outlined
-              color="fantasy"
-              @click="continueAction"
-            >CONTINUE</v-btn>
-          </v-col>
+          <v-row>
+            <v-col cols="12" class="d-flex justify-center mb-0 pb-0">
+              <v-checkbox
+                class="mb-0"
+                v-model="formValue.credentialCreated"
+                :label="`I created my credential in SiriusID app`"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="12" class="d-flex justify-center mt-0 pt-0">
+              <v-btn
+                :disabled="!formValue.credentialCreated"
+                outlined
+                color="fantasy"
+                @click="continueAction"
+              >CONTINUE</v-btn>
+            </v-col>
+          </v-row>
         </template>
       </scan-qr-code>
     </template>

@@ -3,10 +3,6 @@ import {
     Credentials,
     CredentialRequestMessage
 } from 'siriusid-sdk';
-import {
-    WebSocketProvider
-} from '../../mixins/WebSocket';
-
 export const siriusIDStore = {
     // This makes your getters, mutations, and actions accessed by, eg: 'myModule/myModularizedNumber' 
     // instead of mounting getters, mutations, and actions to the root namespace.
@@ -18,13 +14,17 @@ export const siriusIDStore = {
         icon: '',
         documentHash: [],
         // Private key of dApp where created this credential
-        privateKey: "3401374277C42290570A8B88B86BCFCC190DF7808B4F14079F798B0F7D66B9EE"
+        privateKey: "3401374277C42290570A8B88B86BCFCC190DF7808B4F14079F798B0F7D66B9EE",
+        //public key of application
+        publicKey: "86E0ECB51AD6A5B773B75AA4B1AF3744C08BD1D8A441A3F34F26C326C0A9DC37"
     },
-    getters: {},
+    getters: {
+        pvk: state => state.privateKey,
+        credential: state => [state.id]
+    },
     mutations: {},
     actions: {
         async createCredential({state}, data) {
-            console.log('state', state)
             const x = Object.entries(data[0])
             const content = new Map(x)
             // Option - to protect this credential from other fake applications
@@ -43,16 +43,13 @@ export const siriusIDStore = {
             // Using SiriusID to scan this message and store this credential
             return await message.generateQR()
         },
-        async createLoginMessage() {
-            //public key of application
-            const publicKey = "357966ED5562BAEBF4CBF9D4CB1C7EC30F910C9ADC1B72093C6FEBAF9A75A8C7";
-            const credentialRequriredList = ['blockchain-store'];
-            const loginRequestMessage = LoginRequestMessage.create(publicKey, credentialRequriredList);
-            //Using SiriusID to scan this message and send it to login
-            return await loginRequestMessage.generateQR()
-        },
-        initWebsocket() {
-            console.log(WebSocketProvider)
+        createLoginMessage({state}) {
+            // All credentials required
+            const credentialRequriredList = [state.id];
+            // build login request message
+            const loginRequestMessage = LoginRequestMessage.create(state.publicKey, credentialRequriredList);
+            // Using SiriusID to scan this message and send it to login
+            return loginRequestMessage
         }
     }
 }

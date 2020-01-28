@@ -22,20 +22,22 @@
     </v-overlay>
 
     <!-- Message -->
-    <v-snackbar
-      v-model="snackbar.snackbar"
-      :bottom="snackbar.y === 'bottom'"
-      :top="snackbar.y === 'top'"
-      :right="snackbar.x === 'right'"
-      :left="snackbar.x === 'left'"
-      :vertical="snackbar.mode === 'vertical'"
-      :color="snackbar.color"
-      :multi-line="snackbar.mode === 'multi-line'"
-      :timeout="snackbar.timeout"
-    >
-      {{ snackbar.text }}
-      <v-btn dark text @click="snackbar.snackbar = false">Close</v-btn>
-    </v-snackbar>
+    <template>
+      <v-snackbar
+        v-model="snackbar.snackbar"
+        :bottom="snackbar.y === 'bottom'"
+        :top="snackbar.y === 'top'"
+        :right="snackbar.x === 'right'"
+        :left="snackbar.x === 'left'"
+        :vertical="snackbar.mode === 'vertical'"
+        :color="snackbar.color"
+        :multi-line="snackbar.mode === 'multi-line'"
+        :timeout="snackbar.timeout"
+      >
+        {{ snackbar.text }}
+        <v-btn dark text @click="snackbar.snackbar = false">Close</v-btn>
+      </v-snackbar>
+    </template>
 
     <!-- Content -->
     <v-content>
@@ -68,6 +70,13 @@ export default {
   watch: {
     dialog: function(val) {
       document.querySelector('html').style.overflow = val ? 'hidden' : null
+    },
+    isLogged: function(value) {
+      console.log(value)
+      if (value) {
+        console.log('is logged!')
+        this.dialog = false
+      }
     }
   }
 }

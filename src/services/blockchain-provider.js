@@ -1,4 +1,6 @@
-import { crypto } from 'js-xpx-chain-library';
+import {
+  crypto
+} from 'js-xpx-chain-library';
 import {
   Account,
   BlockHttp,
@@ -17,6 +19,7 @@ import {
 
 class BlockchainProvider {
   constructor(node, protocol, typeNetwork) {
+    console.log('typeNetwork', typeNetwork)
     this.url = this.buildURL(node, protocol)
     this.typeNetwork = NetworkType[typeNetwork];
     this.accountHttp = new AccountHttp(this.url)
@@ -51,6 +54,15 @@ class BlockchainProvider {
     return url
   }
 
+
+  /**
+   * 
+   * @param {*} privateKey 
+   */
+  createFromPrivateKey(privateKey, network = this.typeNetwork) {
+    return Account.createFromPrivateKey(privateKey, network)
+  }
+
   /**
    *
    *
@@ -82,7 +94,7 @@ class BlockchainProvider {
    * @returns
    * @memberof BlockchainProvider
    */
-  createFromRawAddress (address) {
+  createFromRawAddress(address) {
     return Address.createFromRawAddress(address)
   }
 
@@ -96,6 +108,9 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   checkAddress(privateKey, network, address) {
+    console.log('privateKey', privateKey)
+    console.log('network', network)
+    console.log('address', address)
     return (Account.createFromPrivateKey(privateKey, network).address.plain() === address) ? true : false;
   }
 
@@ -112,23 +127,43 @@ class BlockchainProvider {
     try {
       if (account && account.encrypted !== '' && common) {
         if (!crypto.passwordToPrivatekey(common, account, account.algo)) {
-          return { status: false, msg: 'Invalid password' };
+          return {
+            status: false,
+            msg: 'Invalid password'
+          };
         }
 
         if (common.isHW) {
-          return { status: true, msg: '' };
+          return {
+            status: true,
+            msg: ''
+          };
         }
+
 
         if (!this.isValidPrivateKey(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
-          return { status: false, msg: 'Invalid password' };
+          return {
+            status: false,
+            msg: 'Invalid password'
+          };
         }
 
-        return { status: true, msg: '' };
+        return {
+          status: true,
+          msg: ''
+        };
       } else {
-        return { status: false, msg: 'You do not have a valid account selected' };
+        return {
+          status: false,
+          msg: 'You do not have a valid account selected'
+        };
       }
     } catch (error) {
-      return { status: false, msg: 'You do not have a valid account selected.' };
+      console.log('error', error)
+      return {
+        status: false,
+        msg: 'You do not have a valid account selected.'
+      };
     }
   }
 
@@ -141,10 +176,10 @@ class BlockchainProvider {
    */
   isValidPrivateKey(privateKey) {
     if (privateKey.length !== 64 && privateKey.length !== 66) {
-      // console.error('Private key length must be 64 or 66 characters !');
+      console.error('Private key length must be 64 or 66 characters !');
       return false;
     } else if (!this.isHexadecimal(privateKey)) {
-      // console.error('Private key must be hexadecimal only !');
+      console.error('Private key must be hexadecimal only !');
       return false;
     } else {
       return true;
@@ -163,4 +198,6 @@ class BlockchainProvider {
   }
 }
 
-export { BlockchainProvider }
+export {
+  BlockchainProvider
+}

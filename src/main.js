@@ -40,7 +40,7 @@ Vue.directive('quantity', {
 // Define prototype
 Vue.prototype.$storage = new StorageService(localStorage)
 Vue.prototype.$generalService = new GeneralService()
-
+/*
 const configIntegration = async function () {
   try {
     const configInfo = await axios.get('../config/config.json')
@@ -56,28 +56,46 @@ const configIntegration = async function () {
     console.error(e)
   }
 }
+*/
+
+const configIntegration = async function () {
+  try {
+    const configInfo = await axios.get('../config/config.json')
+    store.commit('ADD_CONFIG_INFO', configInfo.data)
+    const environment = getEnvironment(configInfo.data)
+    Vue.prototype.$configInfo = configInfo
+    Vue.prototype.$environment = environment
+    Vue.prototype.$blockchainProvider = new BlockchainProvider(
+      environment.connectionNodes.nodes[0],
+      environment.connectionNodes.protocol,
+      environment.connectionNodes.networkType
+    )
+
+    new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App)
+    }).$mount('#blockchainStore')
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 
 
 const getEnvironment = function (configInfo) {
+  console.log('configInfo', configInfo)
   let environment = null
   switch (configInfo.version) {
-    case 'TEST_NET':
-      environment = configInfo.environment.TESTNET
-      break;
+    case 'PUBLIC_TEST':
+      environment = configInfo.environment.PUBLICTEST
+      break
     case 'MAIN_NET':
       environment = configInfo.environment.MAINNET
-      break;
+      break
   }
   return environment
 }
 
-
-new Vue({
-  beforeCreate() {
-    configIntegration()
-  },
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
-}).$mount('#blockchainStore')
+configIntegration()

@@ -5,16 +5,21 @@ export const accountStore = {
     state: {
         dataUser: null,
         isLogged: false,
+        isLoggedFromSSID: false
     },
     getters: {
         userData: state => state.dataUser,
         isLogged: state => state.isLogged,
+        isLoggedFromSSID: state => state.isLogged,
         address: state => state.dataUser.simpleWallet.address['address']
     },
     mutations: {
         LOGIN(state, data) {
             state.isLogged = (data && data.username && data.simpleWallet) ? true : false
             state.dataUser = data
+        },
+        LOGIN_FROM_SSID(state, status) {
+            state.isLoggedFromSSID = status
         },
         UPDATE_DATA_USER(state, data){
             state.dataUser = data

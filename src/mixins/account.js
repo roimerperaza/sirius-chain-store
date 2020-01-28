@@ -1,9 +1,18 @@
-import generalMixins from '../mixins/general'
+import generalMixins from './general'
+import webSocketProvider from './WebSocket';
 export default {
-  mixins: [generalMixins],
+  mixins: [generalMixins, webSocketProvider],
   methods: {
+    async buildQRCode() {
+      // build login login request message
+      const loginRequestMessage = await this.$store.dispatch('siriusIDStore/createLoginMessage')
+      // init websocket connection to verify login
+      this.verifyToLogin(loginRequestMessage)
+      // Generate and return QR code
+      return await loginRequestMessage.generateQR()
+    },
     async createCredential(data, onlyBuildQR) {
-      const response = this.saveUser(data, false, onlyBuildQR)
+      const response = this.verifyUser(data, false, onlyBuildQR)
       if (response && onlyBuildQR) {
         try {
           const rsp = [response]
@@ -88,7 +97,7 @@ export default {
 
       return JSON.parse(users)
     },
-    saveUser(data, update, onlyBuildQR) {
+    verifyUser(data, update, onlyBuildQR) {
       try {
         const users = this.getUsers()
         const currentUser = this.getByUsername(data.username)

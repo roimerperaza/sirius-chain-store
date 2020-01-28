@@ -1,9 +1,9 @@
 {
-  "version": "TEST_NET",
+  "version": "PUBLIC_TEST",
   "nameApp": "Sirius Chain Store",
   "pseudonymApp": "Sirius Chain Store",
   "environment": {
-    "TESTNET": {
+    "PUBLICTEST": {
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Form -->
     <template v-if="!showQRCode">
       <v-form v-model="isValidForm" ref="form">
         <v-container>
@@ -70,16 +71,22 @@
       </v-form>
     </template>
 
+    <!-- Waiting For you Scan -->
     <template v-else>
-      <scan-qr-code :qrCode="qrCode" :infoQrCode="infoQrCode">
+      <scan-qr-code :qrCode="qrCode" :sizeLg="'8'">
         <template slot="body">
-          <v-col cols="12" sm="10" md="9" lg="8" class="pt-0 mx-auto">
-            <div class="text-center">
-              <v-sheet color="grey lighten-3">
-                <v-progress-circular class="ma-2" width="2" size="15" indeterminate color="primary"></v-progress-circular> &nbsp;Waiting for you to scan
+          <v-row>
+            <v-col cols="12" class="mx-auto">
+              <span>{{infoQrCode}}</span>
+              <v-sheet color="grey lighten-3 d-flex align-center justify-center">
+                <v-progress-circular class="ma-2" width="2" size="12" indeterminate color="primary"></v-progress-circular>&nbsp;
+                <span class="subtitle-2">Waiting for you to scan</span>
               </v-sheet>
-            </div>
-          </v-col>
+            </v-col>
+            <v-col cols="12" class="pt-0 mx-auto d-flex justify-center">
+              <v-btn outlined color="fantasy" @click="reset">CANCEL</v-btn>
+            </v-col>
+          </v-row>
         </template>
       </scan-qr-code>
     </template>
@@ -87,24 +94,29 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import generalMixins from '../mixins/general'
 import accountMixin from '../mixins/account'
 
 export default {
   mixins: [generalMixins, accountMixin],
   data: () => ({
-    username: '',
-    password: '',
+    ...mapState('accountStore', ['isLoggedFromSSID']),
+    username: 'rperaza',
+    password: '1qazxsw2',
     configForm: null,
     isValidForm: false,
     sendingForm: false,
     showQRCode: false,
     qrCode: '',
-    infoQrCode: 'Use the SiriusID app to scan the QR code to log in'
+    infoQrCode: 'Use the SiriusID app to scan the QR code to log in',
+    userData: null
   }),
   created() {
     this.configForm = this.getConfigForm()
+  },
+  beforeDestroy() {
+    this.closeConection()
   },
   components: {
     'scan-qr-code': () => import('@/components/ScanQRCode')
@@ -126,16 +138,15 @@ export default {
         this.sendingForm = true
         this.SHOW_LOADING(true)
         setTimeout(async () => {
-          const userData = this.decrypt(this.username, this.password)
-          if (userData) {
-            this.SHOW_LOADING(false)
-            console.log('userData', userData)
-            if (userData.integrateSSI) {
-              this.qrCode = await this.$store.dispatch('siriusIDStore/createLoginMessage')
+          this.userData = this.decrypt(this.username, this.password)
+          if (this.userData) {
+            if (this.userData.integrateSSI) {
+              this.qrCode = await this.buildQRCode()
               this.showQRCode = true
+              this.SHOW_LOADING(false)
             } else {
-              this.LOGIN(userData)
-              this.emitEventForm(`Hi ${userData.name}, welcome!`, 'success')
+              this.LOGIN(this.userData)
+              this.emitEventForm(`Hi ${this.userData.name}, welcome!`, 'success')
             }
           } else {
             this.emitEventForm(
@@ -147,8 +158,24 @@ export default {
       }
     },
     reset() {
+      this.closeConection()
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+      }
+
+      this.username = ''
+      this.password = ''
+      this.qrCode = ''
       this.sendingForm = false
-      this.$refs.form.reset()
+      this.showQRCode = false
+      this.userData = null
+    }
+  },
+  watch: {
+    isLoggedFromSSID(newVal) {
+      console.log('IS LOGGED CHANGED', newVal)
+      this.LOGIN(this.userData)
+      this.emitEventForm(`Hi ${this.userData.name}, welcome!`, 'success')
     }
   }
 }

@@ -42,9 +42,21 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-if="isLogged"></v-app-bar-nav-icon>
       <v-toolbar-title>{{pseudonymApp}}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <!-- <v-btn :title="item.text" v-for="(item, key) of getItemsAppBar" bottom :key="key" icon dark  @click="action(item.action)">
+        <v-badge icon dark overlap top color="red" v-if="item.badge">
+          <span slot="badge">{{item.badgeNumber}}</span>
+          <v-avatar :id="item.id">
+            <v-btn icon dark>
+              <v-icon>{{item.icon}}</v-icon>
+            </v-btn>
+          </v-avatar>
+        </v-badge>
+
+        <v-icon v-else>{{item.icon}}</v-icon>
+      </v-btn>-->
       <template v-for="(item, key) of getItemsAppBar">
-        <template>
-          <v-tooltip bottom :key="key">
+        <div :key="key">
+          <v-tooltip bottom :id="key">
             <template v-slot:activator="{ on }">
               <v-btn icon dark v-on="on" @click="action(item.action)">
                 <v-badge icon dark overlap top color="red" v-if="item.badge">
@@ -61,7 +73,7 @@
             </template>
             <span>{{item.text}}</span>
           </v-tooltip>
-        </template>
+        </div>
       </template>
     </v-app-bar>
   </div>
@@ -77,13 +89,13 @@ export default {
       {
         title: 'Home',
         icon: 'mdi-view-dashboard',
-        route: '/home',
+        route: '/',
         role: 1
       },
       {
         title: 'Profile',
         icon: 'mdi-account',
-        route: '/profile/account',
+        route: '/',
         role: 1
       }
     ],
@@ -104,6 +116,14 @@ export default {
         action: 'authDialog',
         badge: false,
         role: 0
+      },
+      {
+        id: 'log-out',
+        text: 'Logout',
+        icon: 'mdi-logout-variant',
+        action: 'logout',
+        badge: false,
+        role: 1
       }
     ]
   }),
@@ -114,6 +134,8 @@ export default {
         case 'authDialog':
           this.$emit('showDialog', true)
           break
+        case 'logout':
+          this.LOGOUT()
         default:
           break
       }
@@ -132,6 +154,7 @@ export default {
         }
       })
 
+      console.log(items)
       return items
     }
   },
@@ -142,10 +165,12 @@ export default {
       return `v${this.$environment.version}`
     },
     getLinks() {
-      return this.buildRole(this.links)
+      const role = this.buildRole(this.links)
+      return role
     },
     getItemsAppBar() {
-      return this.buildRole(this.itemsAppBar)
+      const role = this.buildRole(this.itemsAppBar)
+      return role
     }
   }
 }
